@@ -28,7 +28,7 @@ class User(db.Model):
     phone_number = db.Column(db.Integer)
     city = db.Column(db.String(25))
     state = db.Column(db.String(25))
-    zipcode = db.Column(db.String(15))
+    zip_code = db.Column(db.String(15))
     tmz = db.Column(db.DateTime)
     alerts = db.Column(db.Boolean)
 
