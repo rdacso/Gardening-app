@@ -1,7 +1,7 @@
-"""Models and database functions for Ratings project."""
+"""Models and database functions for Gardening app project"""
 
 from flask_sqlalchemy import SQLAlchemy
-
+from flask import Flask
 import datetime
 
 
@@ -29,7 +29,7 @@ class User(db.Model):
     city = db.Column(db.String(25))
     state = db.Column(db.String(25))
     zipcode = db.Column(db.String(15))
-    tmz = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    tmz = db.Column(db.DateTime)
     alerts = db.Column(db.Boolean)
 
 
@@ -39,50 +39,27 @@ class User(db.Model):
         return "<User user_id=%s email=%s>" % (self.user_id, self.email)
 
 
-class Alert(db.Model):
-    """Alerts on gardening website."""
-
-    __tablename__ = "alerts"
-
-    alert_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    user_plant_id = db.Column(db.Integer)
-    date = db.Column(db.Datetime)
-    completion = db.Column(db.Boolean)
-    alert_type_id = db.Column(db.String, db.ForeignKey(alerttype.alert_type_id))
-
-
-
-    def __repr__(self):
-        """Provide helpful representation when printed."""
-
-        return "<Alert alert_id=%s garden_id=%s alerts_bool=%s>" % (self.alert_id, self.garden_id, self.alerts_bool)
-
-
 class UserPlant(db.Model):
     """Plants added by individual users"""
 
     __tablename__ = "userplants"
 
     up_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    user_plant_id = db.Column(db.Integer, db.ForeignKey('alerts.user_plant_id'))
-    plant_id = db.Column(db.String(40), db.ForeignKey('plants.plant_id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    plant_id = db.Column(db.Integer, db.ForeignKey('plants.plant_id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     qty = db.Column(db.Integer)
 
     # define relationship to garden
-    garden_plant = db.relationship("PlantType",
+    plant_type = db.relationship("PlantType",
                             backref=db.backref("userplants"))
     user = db.relationship("User",
                            backref=db.backref("userplants"))
-    alerts = db.relationship('Alerts', backref=db.backref('userplants'))
-
-
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<UserPlant user_plant_id=%s garden_id=%s plant_name=%s qty=%s>" % (
-            self.user_plant_id, self.garden_id, self.plant_name, self.qty)
+        return "<UserPlant user_plant_id=%s plant_id=%s user_id=%s qty=%s>" % (
+            self.user_plant_id, self.plant_id, self.user_id, self.qty)
 
 
 class PlantType(db.Model):
@@ -95,7 +72,7 @@ class PlantType(db.Model):
     spacing = db.Column(db.Integer)
     soil_ph_min = db.Column(db.Integer)
     soil_ph_max = db.Column(db.Integer)
-    watering_frequency = db.Column(db.Integer)
+    watering_frequency = db.Column(db.DateTime)
     sun_preference = db.Column(db.String)
     coloring = db.Column(db.String)
     height = db.Column(db.Integer)
@@ -117,16 +94,33 @@ class AlertType(db.Model):
     __tablename__ = 'alerttype'
 
     alert_type_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    alert_type = db.Column(db.Integer, db.ForeignKey('alerts.alert_type_id'))
+    alert_type = db.Column(db.String)
 
     # Define relationship to user
-    user = db.relationship("User",
-                           backref=db.backref("gardens", order_by=garden_id))
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Garden garden_id=%s user_id=%s>" % (self.garden_id, self.user_id)
+        return "<AlertType alert_type_id=%s alert_type=%s>" % (self.alert_type_id, self.alert_type)
+
+class Alert(db.Model):
+    """Alerts on gardening website."""
+
+    __tablename__ = "alerts"
+
+    alert_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    user_plant_id = db.Column(db.Integer, db.ForeignKey('userplants.up_id'),  unique=True)
+    date = db.Column(db.DateTime)
+    completion = db.Column(db.Boolean)
+    alert_type_id = db.Column(db.Integer, db.ForeignKey('alerttype.alert_type_id'))
+
+
+    alerts = db.relationship('UserPlant', backref=db.backref('alerts'))
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<Alert alert_id=%s user_plant_id=%s date=%s completion=%s alert_type_id=%s>" % (self.alert_id, self.user_plant_id, self.date, self.completion, self.alert_type_id)
 
 ##############################################################################
 # Helper functions
@@ -135,7 +129,7 @@ def connect_to_db(app):
     """Connect the database to our Flask app."""
 
     # Configure to use our PostgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///ratings'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///gardening'
     db.app = app
     db.init_app(app)
 

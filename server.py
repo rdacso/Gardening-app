@@ -5,7 +5,7 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import connect_to_db, db, User, Garden, Alert, UserPlant
+from model import connect_to_db, db, User, Alert, UserPlant, AlertType, PlantType
 
 
 app = Flask(__name__)
@@ -142,10 +142,10 @@ def movie_detail(movie_id):
 
     # Get average rating of movie
 
-    rating_scores = [r.score for r in movie.ratings]
-    avg_rating = float(sum(rating_scores)) / len(rating_scores)
+    # rating_scores = [r.score for r in movie.ratings]
+    # avg_rating = float(sum(rating_scores)) / len(rating_scores)
 
-    prediction = None
+    # prediction = None
 
     # Prediction code: only predict if the user hasn't rated it.
 
