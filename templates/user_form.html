@@ -4,16 +4,16 @@
     <h2>Please Sign In</h2>
 
     <form action='/register' method='POST'>
-      <label> First Name <label><input type='text' name='fname'><br>
-      <label> Last Name <label><input type='text' name='lname'><br>
+      <label> First Name <label><input type='text' name='first_name'><br>
+      <label> Last Name <label><input type='text' name='last_name'><br>
       <label> Email </label><input type='text' name='email'><br>
       <label> Phone Number <label><input type='text' name='phone_number'><br>
       <label> City <label><input type='text' name='city'><br>
       <label> State <label><input type='text' name='state'><br>
       <label> Zip Code <label><input type='text' name='zip_code'><br>
       <label> Alerts <label><br>
-        <input type='radio' name='onoff'> On <br>
-        <input type='radio' name='onoff'> Off <br>
+        <input type='radio' name='alerts' value='True'> On <br>
+        <input type='radio' name='alerts' value='False'> Off <br>
       <label> Password </label><input type='text' name='password'><br>
       <input type="submit">
 </form>

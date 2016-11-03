@@ -55,11 +55,11 @@ def register_process():
     city = request.form["city"]
     state = request.form["state"]
     zip_code = request.form["zip_code"]
-    alerts_enabled = request.form["onoff"]
+    alerts = request.form["alerts"]
     password = request.form["password"]
 
 
-    new_user = User(first_name=first_name, last_name=last_name, email=email, phone_number=phone_number, city=city, state=state, zip_code=zip_code, onoff=alerts_enabled, password=password)
+    new_user = User(first_name=first_name, last_name=last_name, email=email, phone_number=phone_number, city=city, state=state, zip_code=zip_code, alerts=alerts, password=password)
 
     db.session.add(new_user)
     db.session.commit()

@@ -3,6 +3,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 import datetime
+from sqlalchemy_utils import PhoneNumber
 
 
 # This is the connection to the PostgreSQL database; we're getting this through
@@ -25,12 +26,12 @@ class User(db.Model):
     password = db.Column(db.String(64), nullable=True)
     first_name = db.Column(db.String(65), nullable=True)
     last_name = db.Column(db.String(65))
-    phone_number = db.Column(db.Integer)
+    phone_number = db.Column(db.String)
     city = db.Column(db.String(25))
     state = db.Column(db.String(25))
     zip_code = db.Column(db.String(15))
-    tmz = db.Column(db.DateTime)
-    alerts = db.Column(db.Boolean)
+    tmz = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    alerts = db.Column(db.Boolean, default=True)
 
 
     def __repr__(self):
