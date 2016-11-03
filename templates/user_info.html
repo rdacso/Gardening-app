@@ -1,11 +1,119 @@
 {% extends 'base.html' %}
 {% block content %}
+<style type="text/css">
+    /* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
 
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+</style>
 <h1>Welcome {{user.first_name}} {{user.last_name}}!</h1>
 
 <h2>Plants</h2>
 
+<!-- Trigger/Open The Modal -->
+<button id="myBtn">Click here to enter plants</button>
+
+<!-- The Modal -->
+<div id="myModal" class="modal" >
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">x</span>
+    <form action='/addplants' method='POST'>
+    <p> Please fill out the following fields regarding the plants you wish to save</p><br>
+    <label>Common Name </label> <input type='text' name='common_name'><br>
+    <label>Soil Type </label> <select name='soil_type'>
+        <option value='coarse_textured'>Course Textured </option>
+        <option value='medium_textured'>Medium Textured </option>
+        <option value='fine_textured'>Fine Textured </option>
+    </select><br>
+    <label> Fertility requirement? </label> <select name='fertility_requirement'><br>
+        <option value='any'> Any </option>
+        <option value='none'> None </option>
+        <option value='low'> Low </option>
+        <option value='medium'> Medium </option>
+        <option value='high'> High </option>
+    </select><br>
+    <label> Water Frequency </label><input type='text' name='water_frequency'><br>
+    <label>Shade Tolerance</label><select name='shade_tolerance'>
+        <option value='any'> Any </option>
+        <option value='intolerant'> Intolerant </option>
+        <option value='intermediate'> Intermediate </option>
+        <option value='tolerant'> Tolerant </option>
+    </select><br>
+    <label>How many of these plants do you have?</label><input type='text' name='qty'></br>
+    <input type="submit">
+    </form>
+
+
+
+  </div>
+
+</div><br>
+
 <a href='\'> Please click here to return to the homepage </a>
 
+<script type="text/javascript">
+    "use strict";
 
+    // Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the button, open the modal 
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+</script>
 {% endblock %}
