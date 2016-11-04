@@ -2,6 +2,7 @@
 
 from jinja2 import StrictUndefined
 
+from datetime import datetime
 from flask import Flask, jsonify,render_template, redirect, request, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -107,28 +108,38 @@ def user_info(user_id):
 
 
 
+
+#jquery ui
     return render_template("user_info.html", user=user)
 
 
 @app.route('/addplants', methods=['POST'])
 def add_plants():
+
+
     common_name= request.form["common_name"]
     soil_type = request.form["soil_type"]
     fertility_requirement = request.form["fertility_requirement"]
-    watering_frequency = request.form["watering_frequency"]
+    # watering_frequency = request.form["watering_frequency"]
+    watering_frequency = datetime.now()
     shade_tolerance = request.form["shade_tolerance"]
+    qty = request.form['qty']
+    user_id = session.get('user_id')
+
+    #shows the plants saved by the individual user. 
 
     new_plant = PlantType(common_name=common_name, soil_type=soil_type, fertility_requirement=fertility_requirement, watering_frequency=watering_frequency, shade_tolerance=shade_tolerance)
     user_plant = UserPlant(qty=qty)
     user_plant.plant_type = new_plant
-    user_plant.user = (user=user, user_plant)
-    #create a user object from the session user id
+    user_plant.user_id = user_id
     db.session.add(new_plant)
     db.session.add(user_plant)
+
     db.session.commit()
 
+
     flash("Your new plant has been added!")
-    return redirect("/users/<user_id>", user=user)
+    return redirect("/users/" + str(user_id))
 
 
 if __name__ == "__main__":

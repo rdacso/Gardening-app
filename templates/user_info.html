@@ -67,7 +67,7 @@
         <option value='medium'> Medium </option>
         <option value='high'> High </option>
     </select><br>
-    <label> Water Frequency </label><input type='text' name='water_frequency'><br>
+    <label> Water Frequency </label><input type='text' name='watering_frequency'><br>
     <label>Shade Tolerance</label><select name='shade_tolerance'>
         <option value='any'> Any </option>
         <option value='intolerant'> Intolerant </option>
@@ -78,12 +78,19 @@
     <input type="submit">
     </form>
 
-
-
   </div>
 
 </div><br>
 
+ <ul>
+      {% for plant in user.userplants %}
+          <li>
+              <a>
+                {{ plant.plant_type.common_name }} 
+              </a>
+          </li>
+      {% endfor %}
+    </ul>
 <a href='\'> Please click here to return to the homepage </a>
 
 <script type="text/javascript">

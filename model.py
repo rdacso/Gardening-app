@@ -54,6 +54,7 @@ class UserPlant(db.Model):
     plant_type = db.relationship("PlantType",
                             backref=db.backref("userplants"))
     user = db.relationship("User",
+
                            backref=db.backref("userplants"))
 
     def __repr__(self):
@@ -140,6 +141,7 @@ def connect_to_db(app):
 
     # Configure to use our PostgreSQL database
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///gardening'
+    app.config['SQLALCHEMY_ECHO'] = True
     db.app = app
     db.init_app(app)
 
