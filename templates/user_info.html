@@ -45,7 +45,7 @@
 <h2>Plants</h2>
 <form action='/addplants' method='POST'>
 
-    <select>
+    <select name='plant_id'>
       {% for plant in load_plants %}
           <option value="{{ plant.plant_id }}">{{ plant.common_name }}</option>
       {% endfor %}
@@ -53,8 +53,20 @@
 
 
   <input type="submit">
+</form>
 
 <h2>These are the plants in your garden!</h2>
+
+ <ul>
+      {% for plant in user.userplants %}
+          <li>
+              <a>
+                {{ plant.plant_type.common_name }} 
+              </a>
+          </li>
+      {% endfor %}
+    </ul>
+<a href='\'> Please click here to return to the homepage </a> 
 
 
 

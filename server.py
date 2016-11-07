@@ -123,19 +123,22 @@ def user_info(user_id):
 def add_plants():
 
     #get form variables
-    common_name= request.form["common_name"]
-    fertility_requirement = request.form["fertility_requirement"]
-    # watering_frequency = datetime.now()
-    shade_tolerance = request.form["shade_tolerance"]
-    qty = request.form['qty']
+    # common_name= request.form["common_name"]
+    # fertility_requirement = request.form["fertility_requirement"]
+    # # watering_frequency = datetime.now()
+    # shade_tolerance = request.form["shade_tolerance"]
+    # qty = request.form['qty']
+
+    print 'I got here ****'
+
+    plant_id = request.form['plant_id']
     user_id = session.get('user_id')
 
     #
-    new_plant = PlantType(common_name=common_name, duration=duration, fertility_requirement=fertility_requirement, shade_tolerance=shade_tolerance)
-    user_plant = UserPlant(qty=qty)
-    user_plant.plant_type = new_plant
+    user_plant = UserPlant(plant_id=plant_id)
+    # user_plant.plant_type = new_plant
     user_plant.user_id = user_id
-    db.session.add(new_plant)
+    # db.session.add(new_plant)
     db.session.add(user_plant)
 
     db.session.commit()
