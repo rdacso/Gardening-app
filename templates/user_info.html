@@ -43,14 +43,28 @@
 <h1>Welcome {{user.first_name}} {{user.last_name}}!</h1>
 
 <h2>Plants</h2>
+<form action='/addplants' method='POST'>
+
+    <select>
+      {% for plant in load_plants %}
+          <option value="{{ plant.plant_id }}">{{ plant.common_name }}</option>
+      {% endfor %}
+    </select>
+
+
+  <input type="submit">
+
+<h2>These are the plants in your garden!</h2>
+
+
 
 <!-- Trigger/Open The Modal -->
-<button id="myBtn">Click here to enter plants</button>
+<!-- <button id="myBtn">Click here to enter plants</button> -->
 
 <!-- The Modal -->
-<div id="myModal" class="modal" >
-  <!-- Modal content -->
-  <div class="modal-content">
+<!-- <div id="myModal" class="modal" >
+ -->  <!-- Modal content -->
+<!--   <div class="modal-content">
     <span class="close">x</span>
     <form action='/addplants' method='POST'>
     <p> Please fill out the following fields regarding the plants you wish to save</p><br>
@@ -91,7 +105,15 @@
           </li>
       {% endfor %}
     </ul>
-<a href='\'> Please click here to return to the homepage </a>
+<a href='\'> Please click here to return to the homepage </a> -->
+
+<!-- <p> Alerts </p>
+    <label> Does your plant require fertilizing? </label> <br>
+      <input type='radio' name='fertility_bool' value='True'> Yes <br>
+      <input type='radio' name='fertility_bool' value='False'> No <br>
+    <span id=datepicker>
+      <label> Please select the last day your plant was fertilized.</label><input type=text id=datepicker>
+    </span> -->
 
 <script type="text/javascript">
     "use strict";

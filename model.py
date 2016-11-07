@@ -71,24 +71,23 @@ class PlantType(db.Model):
 
     plant_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     common_name = db.Column(db.String)
-    state_and_province = db.Column(db.String)
-    duration = db.Column(db.DateTime)
-    active_growth_period = db.Column(db.DateTime)
+    duration = db.Column(db.String)
+    active_growth_period = db.Column(db.String)
     flower_color = db.Column(db.String)
-    flower_conspicuous = db.Column(db.Boolean)
+    flower_conspicuous = db.Column(db.String)
     foliage_color = db.Column(db.String)
-    height = db.Column(db.Integer)
-    soil_type = db.Column(db.String)
+    height = db.Column(db.Float)
+    adapted_to_coarse_textured_soil = db.Column(db.String)
+    adapted_to_medium_textured_soil = db.Column(db.String)
+    adapted_to_fine_textured_soil = db.Column(db.String)
     drought_tolerance = db.Column(db.String)
     fertility_requirement = db.Column(db.String)
-    soil_ph_min = db.Column(db.Integer)
-    soil_ph_max = db.Column(db.Integer)
-    watering_frequency = db.Column(db.DateTime)
+    soil_ph_min = db.Column(db.Float)
+    soil_ph_max = db.Column(db.Float)
     shade_tolerance = db.Column(db.String)
     temperateure_min = db.Column(db.Integer)
-    bloom_period = db.Column(db.String)
-    hardiness_zone_min = db.Column(db.Integer)
-    hardiness_zone_max = db.Column(db.Integer)
+
+
 
     # Define relationship to user
 

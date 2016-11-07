@@ -28,16 +28,7 @@ def index():
     return render_template("homepage.html")
 
 
-@app.route("/users")
-def user_list():
-    """Show list of users."""
-
-    #query and display all users in database
-    users = User.query.all()
-    return render_template("user_list.html", users=users)
-
-
-@app.route('/register')
+@app.route('/register', methods=['GET'])
 def user_signin():
     """User sign in form."""
     
@@ -59,76 +50,88 @@ def register_process():
     alerts = request.form["alerts"]
     password = request.form["password"]
 
-
+    #assign form variables to new_user variable
     new_user = User(first_name=first_name, last_name=last_name, email=email, phone_number=phone_number, city=city, state=state, zip_code=zip_code, alerts=alerts, password=password)
-
+    #add new user to the database
     db.session.add(new_user)
     db.session.commit()
 
-    flash("You have been added! Please log in.")
-    return redirect("/")
+    flash("User %s added." % email)
+    return redirect("/users/%s" % new_user.user_id)
 
-
-@app.route('/logout')
-def logout():
-    """Log out."""
-
-    del session["user_id"]
-    flash("Logged Out.")
-    return redirect("/")
-
-
-@app.route('/login')
+@app.route('/login', methods=['GET'])
 def login():
     """Log In."""
 
     
     flash("Logged In.")
+    #show the login template
     return render_template("login.html")
 
 
 @app.route('/login', methods=['POST'])
 def confirm():
     """Log In."""
-
+    #get the form variables
     email = request.form["email"]
+    password = request.form["password"]
 
-    user = User.query.filter_by(email=email).one()
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        flash("No such user")
+        return redirect("/login")
+
+    if user.password != password:
+        flash("Incorrect password")
+        return redirect("/login")
 
     session["user_id"] = user.user_id
-    flash("Logged In.")
-    return redirect("/users/" + str(user.user_id))
+
+    flash("Logged in")
+    return redirect("/users/%s" % user.user_id)
 
 
-@app.route('/users/<user_id>')
+@app.route('/logout')
+def logout():
+    """Log out."""
+    #delete the session user_id
+    del session["user_id"]
+    flash("Logged Out.")
+    #return user ot the homepage
+    return redirect("/")
+
+
+@app.route("/users")
+def user_list():
+    """Show list of users."""
+
+    #query and display all users in database
+    users = User.query.all()
+    return render_template("user_list.html", users=users)
+
+@app.route('/users/<int:user_id>')
 def user_info(user_id):
     """shows user info"""
-
-    user = User.query.filter_by(user_id=user_id).one()
-
-
-
-
-#jquery ui
-    return render_template("user_info.html", user=user)
+    #show user information based off user_id
+    user = User.query.get(user_id)
+    load_plants = PlantType.query.all()
+    return render_template("user_info.html", user=user, load_plants=load_plants)
 
 
 @app.route('/addplants', methods=['POST'])
 def add_plants():
 
-
+    #get form variables
     common_name= request.form["common_name"]
-    soil_type = request.form["soil_type"]
     fertility_requirement = request.form["fertility_requirement"]
-    # watering_frequency = request.form["watering_frequency"]
-    watering_frequency = datetime.now()
+    # watering_frequency = datetime.now()
     shade_tolerance = request.form["shade_tolerance"]
     qty = request.form['qty']
     user_id = session.get('user_id')
 
-    #shows the plants saved by the individual user. 
-
-    new_plant = PlantType(common_name=common_name, soil_type=soil_type, fertility_requirement=fertility_requirement, watering_frequency=watering_frequency, shade_tolerance=shade_tolerance)
+    #
+    new_plant = PlantType(common_name=common_name, duration=duration, fertility_requirement=fertility_requirement, shade_tolerance=shade_tolerance)
     user_plant = UserPlant(qty=qty)
     user_plant.plant_type = new_plant
     user_plant.user_id = user_id
@@ -139,6 +142,27 @@ def add_plants():
 
 
     flash("Your new plant has been added!")
+
+    # score = int(request.form["score"])
+
+    # user_id = session.get("user_id")
+    # if not user_id:
+    #     raise Exception("No user logged in.")
+
+    # rating = Rating.query.filter_by(user_id=user_id, movie_id=movie_id).first()
+
+    # if rating:
+    #     rating.score = score
+    #     flash("Rating updated.")
+
+    # else:
+    #     rating = Rating(user_id=user_id, movie_id=movie_id, score=score)
+    #     flash("Rating added.")
+    #     db.session.add(rating)
+
+    # db.session.commit()
+
+    # return redirect("/movies/%s" % movie_id)
     return redirect("/users/" + str(user_id))
 
 
