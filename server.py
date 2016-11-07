@@ -1,4 +1,4 @@
-"""Movie Ratings."""
+"""Gardening"""
 
 from jinja2 import StrictUndefined
 
@@ -148,6 +148,9 @@ def add_plants():
 
 
     return redirect("/users/" + str(user_id))
+
+@app.route('/addalerts', methods=['POST'])
+add_alerts():
 
 
 if __name__ == "__main__":

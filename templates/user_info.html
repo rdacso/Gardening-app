@@ -62,69 +62,55 @@
           <li>
               <a>
                 {{ plant.plant_type.common_name }} 
+                <!-- Trigger/Open The Modal -->
+                <button id="myBtn">Alert</button>
+
+                <!-- The Modal -->
+                <div id="myModal" class="modal" >
+                  <!-- Modal content -->
+                  <div class="modal-content">
+                    <span class="close">x</span>
+                    <form action='/addplants' method='POST'>
+                      <label> Do you wish to set an alert for fertilizing? </label> <br>
+                        <input type='radio' name='fertility_bool' value='True'> Yes <br>
+                        <input type='radio' name='fertility_bool' value='False'> No <br>
+                      <span id=datepicker>
+                        <label> Please select the last day your plant was fertilized.</label><input type='text' id='datepicker'><br>        
+                      </span>
+                      <label>Do you wish to set an alert for watering? </label><br> 
+                        <input type='radio' name='watering_bool' value='True'> Yes <br>
+                        <input type='radio' name='watering_bool' value='False'> No <br>
+                      <span id=datepicker>
+                        <label> Please select the last day your plant was watered.</label><input type='text' id='datepicker'><br>  
+                      </span>
+                      <label>Do you wish to set an alert for trimming? </label><br> 
+                        <input type='radio' name='trimming_bool' value='True'> Yes <br>
+                        <input type='radio' name='trimming_bool' value='False'> No <br>
+                      <span id=datepicker>
+                        <label> Please select the last day your plant was trimmed.</label><input type='text' id='datepicker'><br>  
+                      </span>                                            
+
+                      <input type="submit">
+                    </form>
+
+                  </div>
+
+                </div><br>
               </a>
           </li>
       {% endfor %}
     </ul>
+
+
+
 <a href='\'> Please click here to return to the homepage </a> 
 
 
 
-<!-- Trigger/Open The Modal -->
-<!-- <button id="myBtn">Click here to enter plants</button> -->
 
-<!-- The Modal -->
-<!-- <div id="myModal" class="modal" >
- -->  <!-- Modal content -->
-<!--   <div class="modal-content">
-    <span class="close">x</span>
-    <form action='/addplants' method='POST'>
-    <p> Please fill out the following fields regarding the plants you wish to save</p><br>
-    <label>Common Name </label> <input type='text' name='common_name'><br>
-    <label>Soil Type </label> <select name='soil_type'>
-        <option value='coarse_textured'>Course Textured </option>
-        <option value='medium_textured'>Medium Textured </option>
-        <option value='fine_textured'>Fine Textured </option>
-    </select><br>
-    <label> Fertility requirement? </label> <select name='fertility_requirement'><br>
-        <option value='any'> Any </option>
-        <option value='none'> None </option>
-        <option value='low'> Low </option>
-        <option value='medium'> Medium </option>
-        <option value='high'> High </option>
-    </select><br>
-    <label> Water Frequency </label><input type='text' name='watering_frequency'><br>
-    <label>Shade Tolerance</label><select name='shade_tolerance'>
-        <option value='any'> Any </option>
-        <option value='intolerant'> Intolerant </option>
-        <option value='intermediate'> Intermediate </option>
-        <option value='tolerant'> Tolerant </option>
-    </select><br>
-    <label>How many of these plants do you have?</label><input type='text' name='qty'></br>
-    <input type="submit">
-    </form>
-
-  </div>
-
-</div><br>
-
- <ul>
-      {% for plant in user.userplants %}
-          <li>
-              <a>
-                {{ plant.plant_type.common_name }} 
-              </a>
-          </li>
-      {% endfor %}
-    </ul>
-<a href='\'> Please click here to return to the homepage </a> -->
 
 <!-- <p> Alerts </p>
-    <label> Does your plant require fertilizing? </label> <br>
-      <input type='radio' name='fertility_bool' value='True'> Yes <br>
-      <input type='radio' name='fertility_bool' value='False'> No <br>
-    <span id=datepicker>
-      <label> Please select the last day your plant was fertilized.</label><input type=text id=datepicker>
+    
     </span> -->
 
 <script type="text/javascript">
@@ -157,4 +143,11 @@ window.onclick = function(event) {
 }
 
 </script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( "#datepicker" ).datepicker();
+  } );
+  </script>
 {% endblock %}
