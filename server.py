@@ -123,49 +123,30 @@ def user_info(user_id):
 def add_plants():
 
     #get form variables
-    # common_name= request.form["common_name"]
-    # fertility_requirement = request.form["fertility_requirement"]
-    # # watering_frequency = datetime.now()
-    # shade_tolerance = request.form["shade_tolerance"]
-    # qty = request.form['qty']
-
-    print 'I got here ****'
-
     plant_id = request.form['plant_id']
+    #get user session id
     user_id = session.get('user_id')
 
-    #
-    user_plant = UserPlant(plant_id=plant_id)
-    # user_plant.plant_type = new_plant
-    user_plant.user_id = user_id
-    # db.session.add(new_plant)
-    db.session.add(user_plant)
+    #check to see if user is logged in.
+    if not user_id:
+        raise Exception("No user logged in.")
+
+    # query the userplant table for a specific plant id
+    user_plant = UserPlant.query.filter_by(user_id=user_id, plant_id=plant_id).first()
+    
+    #conditional that searches userplant table for existing plants. if it already exists, plant is left alone. if plant does not exist, it's added to the table.
+    if user_plant:
+        user_plant.plant_id = plant_id
+        flash('Plant updated!')
+    else: 
+        user_plant = UserPlant(plant_id=plant_id)
+        user_plant.user_id = user_id
+        flash('New plant added')
+        db.session.add(user_plant)
 
     db.session.commit()
 
 
-    flash("Your new plant has been added!")
-
-    # score = int(request.form["score"])
-
-    # user_id = session.get("user_id")
-    # if not user_id:
-    #     raise Exception("No user logged in.")
-
-    # rating = Rating.query.filter_by(user_id=user_id, movie_id=movie_id).first()
-
-    # if rating:
-    #     rating.score = score
-    #     flash("Rating updated.")
-
-    # else:
-    #     rating = Rating(user_id=user_id, movie_id=movie_id, score=score)
-    #     flash("Rating added.")
-    #     db.session.add(rating)
-
-    # db.session.commit()
-
-    # return redirect("/movies/%s" % movie_id)
     return redirect("/users/" + str(user_id))
 
 
