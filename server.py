@@ -57,6 +57,7 @@ def register_process():
     db.session.commit()
 
     flash("User %s added." % email)
+    session["user_id"] = new_user.user_id
     return redirect("/users/%s" % new_user.user_id)
 
 @app.route('/login', methods=['GET'])
@@ -64,7 +65,7 @@ def login():
     """Log In."""
 
     
-    flash("Logged In.")
+
     #show the login template
     return render_template("login.html")
 
@@ -150,7 +151,31 @@ def add_plants():
     return redirect("/users/" + str(user_id))
 
 @app.route('/addalerts', methods=['POST'])
-add_alerts():
+def add_alerts():
+    pass
+
+#     fertility_bool = request.form['fertility_bool']
+#     occurence = request.form['occurence']
+#     alert_date = request.form['alert_date']
+#     watering_bool = request.form['watering_bool']
+#     trimming_bool = request.form['trimming_bool']
+
+# user_alert = Alerts.query.filter_by(user_plant_id=user_plant_id, alert_type_id=alert_type_id).first()
+    
+#     #conditional that searches userplant table for existing plants. if it already exists, plant is left alone. if plant does not exist, it's added to the table.
+#     if user_alert:
+#         user_alert.user_plant_id = user_plant_id
+#         flash('alert updated!')
+#     else: 
+#         user_alert = Alert(alert_type_id=alert_type_id)
+#         user_plant.user_id = user_id
+#         flash('New plant added')
+#         db.session.add(user_plant)
+
+#     db.session.commit()
+
+
+    # return redirect("/users/" + str(user_id))
 
 
 if __name__ == "__main__":

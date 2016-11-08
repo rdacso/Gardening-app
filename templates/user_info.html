@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
+
 <style type="text/css">
     /* The Modal (background) */
+/* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -40,7 +42,7 @@
 }
 
 </style>
-<h1>Welcome {{user.first_name}} {{user.last_name}}!</h1>
+<h1>Welcome {{ user.first_name }} {{ user.last_name }}!</h1>
 
 <h2>Plants</h2>
 <form action='/addplants' method='POST'>
@@ -63,40 +65,37 @@
               <a>
                 {{ plant.plant_type.common_name }} 
                 <!-- Trigger/Open The Modal -->
-                <button id="myBtn">Alert</button>
+              </a>
+              <!-- Trigger/Open The Modal -->
+                <button id="{{ plant.up_id }}" class='test'>Alert</button>
 
                 <!-- The Modal -->
-                <div id="myModal" class="modal" >
+                <div id="alertModal" class="modal">
+
                   <!-- Modal content -->
                   <div class="modal-content">
                     <span class="close">x</span>
-                    <form action='/addplants' method='POST'>
-                      <label> Do you wish to set an alert for fertilizing? </label> <br>
-                        <input type='radio' name='fertility_bool' value='True'> Yes <br>
-                        <input type='radio' name='fertility_bool' value='False'> No <br>
-                      <span id=datepicker>
-                        <label> Please select the last day your plant was fertilized.</label><input type='text' id='datepicker'><br>        
-                      </span>
-                      <label>Do you wish to set an alert for watering? </label><br> 
-                        <input type='radio' name='watering_bool' value='True'> Yes <br>
-                        <input type='radio' name='watering_bool' value='False'> No <br>
-                      <span id=datepicker>
-                        <label> Please select the last day your plant was watered.</label><input type='text' id='datepicker'><br>  
-                      </span>
-                      <label>Do you wish to set an alert for trimming? </label><br> 
-                        <input type='radio' name='trimming_bool' value='True'> Yes <br>
-                        <input type='radio' name='trimming_bool' value='False'> No <br>
-                      <span id=datepicker>
-                        <label> Please select the last day your plant was trimmed.</label><input type='text' id='datepicker'><br>  
-                      </span>                                            
+                     <form action='/addalert' method='POST'>
+                        <label> Do you wish to set an alert for fertilizing? </label> <br>
+                          <input type='radio' name='fertility_bool' value='True'> Yes <br>
+                          <input type='radio' name='fertility_bool' value='False'> No <br>
+                        <label> Please select the last day your plant was fertilized.</label><input type='date' class="form-control" id='datetimepicker1' name='alert_date' /><br>
+                        <label> How often should your plant be fertilized?</label><input type='text' name='occurence'><br>
+                        <label>Do you wish to set an alert for watering? </label><br> 
+                          <input type='radio' name='watering_bool' value='True'> Yes <br>
+                          <input type='radio' name='watering_bool' value='False'> No <br>
+                        <label> Please select the last day your plant was watered.</label><input type='date' class="form-control" id='datetimepicker1' name='alert_date' /><br>
+                        <label> How often should your plant be watered?</label><input type='text' name='occurence'><br>              
+                        <label>Do you wish to set an alert for trimming? </label><br> 
+                          <input type='radio' name='trimming_bool' value='True'> Yes <br>
+                          <input type='radio' name='trimming_bool' value='False'> No <br>
+                        <label> Please select the last day your plant was fertilized.</label><input type='date' class="form-control" id='datetimepicker1' name='alert_date' /><br>
+                        <label> How often should your plant be fertilized?</label><input type='text' name='occurence'><br>                        
 
-                      <input type="submit">
-                    </form>
-
+                        <input type="submit">
+                      </form>
                   </div>
-
-                </div><br>
-              </a>
+                </div>    
           </li>
       {% endfor %}
     </ul>
@@ -106,29 +105,30 @@
 <a href='\'> Please click here to return to the homepage </a> 
 
 
+<script src="https://code.jquery.com/jquery.js"></script>
+<script>
+$('.test').on('click',function() {modal.style.display = "block";});
 
+$()
 
-
-<!-- <p> Alerts </p>
-    
-    </span> -->
-
+</script>
 <script type="text/javascript">
-    "use strict";
+"use strict";
 
-    // Get the modal
-var modal = document.getElementById('myModal');
+// Get the modal
+var modal = document.getElementById('alertModal');
 
 // Get the button that opens the modal
-var btn = document.getElementById("myBtn");
+// var btn = document.getElementsByClassName('test')
+// var btn = document.getElementById("myBtn");
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 
 // When the user clicks on the button, open the modal 
-btn.onclick = function() {
-    modal.style.display = "block";
-}
+// btn.onclick = function() {
+//     modal.style.display = "block";
+// }
 
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
@@ -141,13 +141,6 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
-
 </script>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script>
-  $( function() {
-    $( "#datepicker" ).datepicker();
-  } );
-  </script>
+
 {% endblock %}

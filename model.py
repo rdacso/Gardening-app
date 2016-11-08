@@ -104,7 +104,11 @@ class AlertType(db.Model):
     __tablename__ = 'alerttype'
 
     alert_type_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    alert_type = db.Column(db.String)
+    fertility_bool = db.Column(db.Boolean)
+    occurence = db.Column(db.Integer)
+    alert_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    watering_bool = db.Column(db.Boolean)
+    trimming_bool = db.Column(db.Boolean)
 
     # Define relationship to user
 
