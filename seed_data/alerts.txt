@@ -1,0 +1,3 @@
+watering
+fertilizing
+trimming

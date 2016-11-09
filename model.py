@@ -46,6 +46,7 @@ class UserPlant(db.Model):
     __tablename__ = "userplants"
 
     up_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    alert_id = db.Column(db.Integer, unique=True)
     plant_id = db.Column(db.Integer, db.ForeignKey('plants.plant_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     qty = db.Column(db.Integer)
@@ -104,11 +105,7 @@ class AlertType(db.Model):
     __tablename__ = 'alerttype'
 
     alert_type_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    fertility_bool = db.Column(db.Boolean)
-    occurence = db.Column(db.Integer)
-    alert_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
-    watering_bool = db.Column(db.Boolean)
-    trimming_bool = db.Column(db.Boolean)
+    alert_type = db.Column(db.String)
 
     # Define relationship to user
 
@@ -130,6 +127,7 @@ class Alert(db.Model):
 
 
     alerts = db.relationship('UserPlant', backref=db.backref('alerts'))
+    alert_types = db.relationship('AlertType', backref=db.backref('alerts'))
 
     def __repr__(self):
         """Provide helpful representation when printed."""

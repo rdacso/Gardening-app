@@ -22,7 +22,6 @@ def load_plants():
 
     for i, row in enumerate(open('seed_data/plants.txt')):
         row = row.strip('"')
-        print row
         row = row.rstrip()
         common_name, duration, active_growth_period, flower_color, flower_conspicuous, foliage_color, height, adapted_to_coarse_textured_soil, adapted_to_medium_textured_soil, adapted_to_fine_textured_soil, drought_tolerance, fertility_requirement, soil_ph_min, soil_ph_max, shade_tolerance, temperateure_min   = row.split('","')
 
@@ -50,6 +49,19 @@ def load_plants():
     db.session.commit()
 
 
+def load_alerts():
+    print 'Alerts'
+
+    AlertType.query.delete()
+    
+
+    for i, row in enumerate(open('seed_data/alerts.txt')):
+        row = row.rstrip()
+        alert_type = row.split()
+        alert = AlertType(alert_type=alert_type)
+
+        db.session.add(alert)
+    db.session.commit()
 
 
 if __name__ == "__main__":
@@ -60,4 +72,5 @@ if __name__ == "__main__":
 
     # Import different types of data
     load_plants()
+    load_alerts()
 

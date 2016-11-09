@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<style type="text/css">
+<style type='text/css'>
     /* The Modal (background) */
 /* The Modal (background) */
 .modal {
@@ -49,12 +49,12 @@
 
     <select name='plant_id'>
       {% for plant in load_plants %}
-          <option value="{{ plant.plant_id }}">{{ plant.common_name }}</option>
+          <option value='{{ plant.plant_id }}'>{{ plant.common_name }}</option>
       {% endfor %}
     </select>
 
 
-  <input type="submit">
+  <input type='submit'>
 </form>
 
 <h2>These are the plants in your garden!</h2>
@@ -67,32 +67,22 @@
                 <!-- Trigger/Open The Modal -->
               </a>
               <!-- Trigger/Open The Modal -->
-                <button id="{{ plant.up_id }}" class='test'>Alert</button>
+                <button id='{{ plant.up_id }}' class='alertButton' data-value='test'>Alert</button>
 
                 <!-- The Modal -->
-                <div id="alertModal" class="modal">
+                <div id='alertModal' class='modal'>
 
                   <!-- Modal content -->
-                  <div class="modal-content">
-                    <span class="close">x</span>
-                     <form action='/addalert' method='POST'>
-                        <label> Do you wish to set an alert for fertilizing? </label> <br>
-                          <input type='radio' name='fertility_bool' value='True'> Yes <br>
-                          <input type='radio' name='fertility_bool' value='False'> No <br>
-                        <label> Please select the last day your plant was fertilized.</label><input type='date' class="form-control" id='datetimepicker1' name='alert_date' /><br>
-                        <label> How often should your plant be fertilized?</label><input type='text' name='occurence'><br>
-                        <label>Do you wish to set an alert for watering? </label><br> 
-                          <input type='radio' name='watering_bool' value='True'> Yes <br>
-                          <input type='radio' name='watering_bool' value='False'> No <br>
-                        <label> Please select the last day your plant was watered.</label><input type='date' class="form-control" id='datetimepicker1' name='alert_date' /><br>
-                        <label> How often should your plant be watered?</label><input type='text' name='occurence'><br>              
-                        <label>Do you wish to set an alert for trimming? </label><br> 
-                          <input type='radio' name='trimming_bool' value='True'> Yes <br>
-                          <input type='radio' name='trimming_bool' value='False'> No <br>
-                        <label> Please select the last day your plant was fertilized.</label><input type='date' class="form-control" id='datetimepicker1' name='alert_date' /><br>
-                        <label> How often should your plant be fertilized?</label><input type='text' name='occurence'><br>                        
+                  <div class='modal-content'>
+                    <span class='close'>x</span>
+                      <form action='/addalerts' method='POST'>
+                      <select name='alert_type_id'>
+                        {% for alert in load_alerts %}
+                            <option value='{{ alert.alert_type_id }}'>{{ alert.alert_type }}</option>
+                        {% endfor %}
+                      </select>
 
-                        <input type="submit">
+                        <input type='submit'>
                       </form>
                   </div>
                 </div>    
@@ -105,42 +95,39 @@
 <a href='\'> Please click here to return to the homepage </a> 
 
 
-<script src="https://code.jquery.com/jquery.js"></script>
+<script src='https://code.jquery.com/jquery.js'></script>
 <script>
-$('.test').on('click',function() {modal.style.display = "block";});
+// Get the button that opens the modal
+// When the user clicks on the button, open the modal 
+$('.alertButton').on('click',function() {alertModal.style.display = 'block';});
 
 $()
 
 </script>
-<script type="text/javascript">
-"use strict";
+<script type='text/javascript'>
+'use strict';
 
 // Get the modal
-var modal = document.getElementById('alertModal');
+var alertModal = document.getElementById('alertModal');
 
-// Get the button that opens the modal
-// var btn = document.getElementsByClassName('test')
-// var btn = document.getElementById("myBtn");
 
 // Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks on the button, open the modal 
-// btn.onclick = function() {
-//     modal.style.display = "block";
-// }
+var close = document.getElementsByClassName('close')[0];
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-    modal.style.display = "none";
+close.onclick = function() {
+    alertModal.style.display = 'none';
 }
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
+    if (event.target == alertModal) {
+        alertModal.style.display = 'none';
     }
 }
 </script>
 
 {% endblock %}
+
+#grab from html data value
+# in javascript in event listener - get data value and add it into the modal as a hidden element. 
