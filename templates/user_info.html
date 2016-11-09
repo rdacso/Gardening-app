@@ -76,11 +76,13 @@
                   <div class='modal-content'>
                     <span class='close'>x</span>
                       <form action='/addalerts' method='POST'>
+                      <label>Please select the alert you wish to set.</label>
                       <select name='alert_type_id'>
                         {% for alert in load_alerts %}
                             <option value='{{ alert.alert_type_id }}'>{{ alert.alert_type }}</option>
                         {% endfor %}
-                      </select>
+                      </select><br>
+                      <label>Next care date: </label><input type='date' name='date'>
 
                         <input type='submit'>
                       </form>

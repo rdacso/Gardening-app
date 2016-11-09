@@ -155,35 +155,29 @@ def add_plants():
 def add_alerts():
 
     alert_type_id = request.form['alert_type_id']
+    date = request.form['date']
 
     user_id = session.get('user_id')
- 
 
- #    new_plant = PlantType(common_name=common_name, soil_type=soil_type, fertility_requirement=fertility_requirement, watering_frequency=watering_frequency, shade_tolerance=shade_tolerance)
- # +    user_plant = UserPlant(qty=qty)
- # +    user_plant.plant_type = new_plant
- # +    user_plant.user = (user=user, user_plant)
- # +    #create a user object from the session user id
- # +    db.session.add(new_plant)
- # +    db.session.add(user_plant)
- # +    db.session.commit()
-    new_alert = AlertType(alert_type_id=alert_type_id)
-    user_alert = Alert(new_alert)
+    user_alert = Alert.query.filter_by(alert_type_id=alert_type_id, date=date, user_plant_id=user_plant_id ).first()
     
-    db.session.add(new_alert)
-    db.session.add(user_alert)
+    #conditional that searches userplant table for existing plants. if it already exists, plant is left alone. if plant does not exist, it's added to the table.
+    if user_alert:
+        user_alert.alert_type_id = alert_type_id
+        flash('Alert updated!')
+    else: 
+        user_alert = AlertType(alert_type_id=alert_type_id)
+        user_alert.user_id = user_id
+        flash('New alert added')
+        db.session.add(user_alert)
+
     db.session.commit()
 
 
-    # alert_info = AlertType(fertility_bool=fertility_bool, fertility_occurence=fertility_occurence, fertility_alert_date=fertility_alert_date, watering_bool=watering_bool, watering_occurrence=watering_occurrence, watering_alert_date=watering_alert_date, trimming_bool=trimming_bool, trimming_occurrence=trimming_occurrence, trimming_alert_date=trimming_alert_date)
-    # user_alert = UserPlant(up_id=up_id)
-    # user_alert.alerts = alert_info
 
-
-
-    db.session.add(alert_info)
-    db.session.add(user_alert)
-    db.session.commit()
+    # db.session.add(alert_info)
+    # db.session.add(user_alert)
+    # db.session.commit()
 
 
 
