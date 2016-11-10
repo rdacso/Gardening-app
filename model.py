@@ -120,14 +120,14 @@ class Alert(db.Model):
     __tablename__ = "alerts"
 
     alert_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    user_plant_id = db.Column(db.Integer, db.ForeignKey('userplants.up_id'),  unique=True)
+    user_plant_id = db.Column(db.Integer, db.ForeignKey('userplants.up_id'))
     date = db.Column(db.DateTime)
     completion = db.Column(db.Boolean)
     alert_type_id = db.Column(db.Integer, db.ForeignKey('alerttype.alert_type_id'))
 
 
     alerts = db.relationship('UserPlant', backref=db.backref('alerts'))
-    alert_types = db.relationship('AlertType', backref=db.backref('alerts'))
+    alert_type = db.relationship('AlertType', backref=db.backref('alerts'))
 
     def __repr__(self):
         """Provide helpful representation when printed."""

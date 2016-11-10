@@ -67,7 +67,7 @@
                 <!-- Trigger/Open The Modal -->
               </a>
               <!-- Trigger/Open The Modal -->
-                <button id='{{ plant.up_id }}' class='alertButton' data-value='test'>Alert</button>
+                <button id='{{ plant.up_id }}' class='alertButton' name='user_plant'>Alert</button>
 
                 <!-- The Modal -->
                 <div id='alertModal' class='modal'>
@@ -76,6 +76,7 @@
                   <div class='modal-content'>
                     <span class='close'>x</span>
                       <form action='/addalerts' method='POST'>
+                      <input type='hidden' value='{{ plant.up_id }}' name='user_plant_id'>
                       <label>Please select the alert you wish to set.</label>
                       <select name='alert_type_id'>
                         {% for alert in load_alerts %}
@@ -118,11 +119,13 @@ var close = document.getElementsByClassName('close')[0];
 
 // When the user clicks on <span> (x), close the modal
 close.onclick = function() {
+    console.log("clicked close");
     alertModal.style.display = 'none';
 }
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
+    console.log("clicked window");
     if (event.target == alertModal) {
         alertModal.style.display = 'none';
     }

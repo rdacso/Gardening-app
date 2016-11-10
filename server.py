@@ -138,11 +138,10 @@ def add_plants():
     
     #conditional that searches userplant table for existing plants. if it already exists, plant is left alone. if plant does not exist, it's added to the table.
     if user_plant:
-        user_plant.plant_id = plant_id
+        user_plant.plant_id == plant_id
         flash('Plant updated!')
     else: 
-        user_plant = UserPlant(plant_id=plant_id)
-        user_plant.user_id = user_id
+        user_plant = UserPlant(plant_id=plant_id, user_id=user_id)
         flash('New plant added')
         db.session.add(user_plant)
 
@@ -153,21 +152,23 @@ def add_plants():
 
 @app.route('/addalerts', methods=['POST'])
 def add_alerts():
+    print "**********************", request.form['alert_type_id']
 
+    user_plant_id = request.form['user_plant_id']
     alert_type_id = request.form['alert_type_id']
     date = request.form['date']
-
     user_id = session.get('user_id')
+    print user_id, "******************************"
 
-    user_alert = Alert.query.filter_by(alert_type_id=alert_type_id, date=date, user_plant_id=user_plant_id ).first()
+
+    user_alert = Alert.query.filter_by(alert_type_id=alert_type_id, user_plant_id=user_plant_id ).first()
     
     #conditional that searches userplant table for existing plants. if it already exists, plant is left alone. if plant does not exist, it's added to the table.
     if user_alert:
-        user_alert.alert_type_id = alert_type_id
+        # user_alert.alert_id = alert_id
         flash('Alert updated!')
     else: 
-        user_alert = AlertType(alert_type_id=alert_type_id)
-        user_alert.user_id = user_id
+        user_alert = Alert(user_plant_id=user_plant_id, alert_type_id=alert_type_id)
         flash('New alert added')
         db.session.add(user_alert)
 
@@ -184,16 +185,16 @@ def add_alerts():
     # user_alert = AlertType.query.filter_by(fertility_bool=fertility_bool, fertility_occurence=fertility_occurence, fertility_alert_date=fertility_alert_date, watering_bool=watering_bool, watering_occurrence=watering_occurrence, watering_alert_date=watering_alert_date, trimming_bool=trimming_bool, trimming_occurrence=trimming_occurrence, trimming_alert_date=trimming_alert_date).first()
     # print user_alert
     #conditional that searches userplant table for existing alerts. if it already exists, plant is left alone. if alert does not exist, it's added to the table.
-    if user_alert:
-        user_alert.user_plant_id = user_plant_id
-        flash('alert updated!')
-    else: 
-        user_alert = Alert(alert_type_id=alert_type_id)
-        user_plant.user_id = user_id
-        flash('New alert added')
-        db.session.add(user_alert)
+    # if user_alert:
+    #     user_alert.user_plant_id = user_plant_id
+    #     flash('alert updated!')
+    # else: 
+    #     user_alert = Alert(alert_type_id=alert_type_id)
+    #     user_plant.user_id = user_id
+    #     flash('New alert added')
+    #     db.session.add(user_alert)
 
-    db.session.commit()
+    # db.session.commit()
 
     
 
