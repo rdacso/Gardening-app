@@ -16,7 +16,6 @@
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
-
 /* Modal Content/Box */
 .modal-content {
     background-color: #fefefe;
@@ -25,7 +24,6 @@
     border: 1px solid #888;
     width: 80%; /* Could be more or less, depending on screen size */
 }
-
 /* The Close Button */
 .close {
     color: #aaa;
@@ -33,14 +31,12 @@
     font-size: 28px;
     font-weight: bold;
 }
-
 .close:hover,
 .close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
 }
-
 </style>
 <h1>Welcome {{ user.first_name }} {{ user.last_name }}!</h1>
 
@@ -70,7 +66,7 @@
                 <button id='{{ plant.up_id }}' class='alertButton' name='user_plant'>Alert</button>
 
                 <!-- The Modal -->
-                <div id='alertModal' class='modal'>
+                <div id='modal{{ plant.up_id }}' class='modal'>
 
                   <!-- Modal content -->
                   <div class='modal-content'>
@@ -85,16 +81,24 @@
                       </select><br>
                       <label>Next care date: </label><input type='date' name='date'>
 
-                        <input type='submit'>
+                        <input type='submit' value='{{ plant.up_id }}'>
                       </form>
                   </div>
-                </div>    
+                </div> 
+
+                <form action='/alerts', id='{{ plant.up_id }}'>
+                <input type='hidden' value='{{ plant.up_id }}' name='user_plant_id'>
+                  {% for alert in user_alert %}<br>
+                   {{ alert.alert.plant_type.common_name }} <br>
+                   {{ alert.alert_type.alert_type }}<br>
+                   {{ alert.date }} <br>
+                  {% endfor %}
+              </form> 
           </li>
       {% endfor %}
     </ul>
 
-
-
+<a href='\alerts'> Please click here to access your alerts page </a><br>
 <a href='\'> Please click here to return to the homepage </a> 
 
 
@@ -102,27 +106,24 @@
 <script>
 // Get the button that opens the modal
 // When the user clicks on the button, open the modal 
-$('.alertButton').on('click',function() {alertModal.style.display = 'block';});
+{% for plant in user.userplants %}
+  $('#{{ plant.up_id }}').on('click',function() {
+    var alertModal = document.getElementById('modal{{ plant.up_id }}');
+    alertModal.style.display = 'block';});
 
-$()
-
+{% endfor %}
 </script>
 <script type='text/javascript'>
 'use strict';
-
 // Get the modal
-var alertModal = document.getElementById('alertModal');
-
 
 // Get the <span> element that closes the modal
 var close = document.getElementsByClassName('close')[0];
-
 // When the user clicks on <span> (x), close the modal
 close.onclick = function() {
     console.log("clicked close");
     alertModal.style.display = 'none';
 }
-
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     console.log("clicked window");

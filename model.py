@@ -61,8 +61,7 @@ class UserPlant(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<UserPlant user_plant_id=%s plant_id=%s user_id=%s qty=%s>" % (
-            self.user_plant_id, self.plant_id, self.user_id, self.qty)
+        return "<UserPlant up_id=%s plant_id=%s user_id=%s qty=%s>" % (self.up_id, self.plant_id, self.user_id, self.qty)
 
 
 class PlantType(db.Model):
@@ -126,7 +125,7 @@ class Alert(db.Model):
     alert_type_id = db.Column(db.Integer, db.ForeignKey('alerttype.alert_type_id'))
 
 
-    alerts = db.relationship('UserPlant', backref=db.backref('alerts'))
+    alert = db.relationship('UserPlant', backref=db.backref('alerts'))
     alert_type = db.relationship('AlertType', backref=db.backref('alerts'))
 
     def __repr__(self):

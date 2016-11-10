@@ -118,7 +118,9 @@ def user_info(user_id):
     user = User.query.get(user_id)
     load_plants = PlantType.query.all()
     load_alerts = AlertType.query.all()
-    return render_template("user_info.html", user=user, load_plants=load_plants, load_alerts=load_alerts)
+    scheduled_alerts = Alert.query.all()
+    user_weekly_plants = UserPlant.query.all()
+    return render_template("user_info.html", user=user, load_plants=load_plants, load_alerts=load_alerts, scheduled_alerts=scheduled_alerts, user_weekly_plants=user_weekly_plants)
 
 
 @app.route('/addplants', methods=['POST'])
@@ -139,7 +141,7 @@ def add_plants():
     #conditional that searches userplant table for existing plants. if it already exists, plant is left alone. if plant does not exist, it's added to the table.
     if user_plant:
         user_plant.plant_id == plant_id
-        flash('Plant updated!')
+        flash('Plant already exists!')
     else: 
         user_plant = UserPlant(plant_id=plant_id, user_id=user_id)
         flash('New plant added')
@@ -154,52 +156,35 @@ def add_plants():
 def add_alerts():
     print "**********************", request.form['alert_type_id']
 
-    user_plant_id = request.form['user_plant_id']
-    alert_type_id = request.form['alert_type_id']
+    user_plant_id = request.form.get('user_plant_id')
+    alert_type_id = request.form.get('alert_type_id')
     date = request.form['date']
     user_id = session.get('user_id')
     print user_id, "******************************"
 
 
-    user_alert = Alert.query.filter_by(alert_type_id=alert_type_id, user_plant_id=user_plant_id ).first()
+    user_alert = Alert.query.filter_by(alert_type_id=alert_type_id, user_plant_id=user_plant_id, date=date ).all()
     
     #conditional that searches userplant table for existing plants. if it already exists, plant is left alone. if plant does not exist, it's added to the table.
     if user_alert:
-        # user_alert.alert_id = alert_id
+        # user_alert.date = date
         flash('Alert updated!')
     else: 
-        user_alert = Alert(user_plant_id=user_plant_id, alert_type_id=alert_type_id)
+        user_alert = Alert(user_plant_id=user_plant_id, alert_type_id=alert_type_id, date=date)
         flash('New alert added')
         db.session.add(user_alert)
 
     db.session.commit()
-
-
-
-    # db.session.add(alert_info)
-    # db.session.add(user_alert)
-    # db.session.commit()
-
-
-
-    # user_alert = AlertType.query.filter_by(fertility_bool=fertility_bool, fertility_occurence=fertility_occurence, fertility_alert_date=fertility_alert_date, watering_bool=watering_bool, watering_occurrence=watering_occurrence, watering_alert_date=watering_alert_date, trimming_bool=trimming_bool, trimming_occurrence=trimming_occurrence, trimming_alert_date=trimming_alert_date).first()
-    # print user_alert
-    #conditional that searches userplant table for existing alerts. if it already exists, plant is left alone. if alert does not exist, it's added to the table.
-    # if user_alert:
-    #     user_alert.user_plant_id = user_plant_id
-    #     flash('alert updated!')
-    # else: 
-    #     user_alert = Alert(alert_type_id=alert_type_id)
-    #     user_plant.user_id = user_id
-    #     flash('New alert added')
-    #     db.session.add(user_alert)
-
-    # db.session.commit()
-
     
 
     return redirect("/users/" + str(user_id))
 
+@app.route('/alerts')
+def alert_display():
+
+    user_id = session.get('user_id')
+
+    return redirect("/users/" + str(user_id))
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
