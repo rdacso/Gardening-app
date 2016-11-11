@@ -71,29 +71,21 @@
                   <!-- Modal content -->
                   <div class='modal-content'>
                     <span class='close'>x</span>
+
                       <form action='/addalerts' method='POST'>
                       <input type='hidden' value='{{ plant.up_id }}' name='user_plant_id'>
                       <label>Please select the alert you wish to set.</label>
-                      <select name='alert_type_id'>
+                      <select id='{{ plant.up_id }}' name='alert_type_id'>
                         {% for alert in load_alerts %}
                             <option value='{{ alert.alert_type_id }}'>{{ alert.alert_type }}</option>
                         {% endfor %}
                       </select><br>
-                      <label>Next care date: </label><input type='date' name='date'>
-
-                        <input type='submit' value='{{ plant.up_id }}'>
+                      <label>Next care date: </label><input type='date' id='{{ plant.up_id }}' name='date'>
+                        <input type='submit' id='modalsubmit{{plant.up_id }}' >
                       </form>
+
                   </div>
                 </div> 
-
-                <form action='/alerts', id='{{ plant.up_id }}'>
-                <input type='hidden' value='{{ plant.up_id }}' name='user_plant_id'>
-                  {% for alert in user_alert %}<br>
-                   {{ alert.alert.plant_type.common_name }} <br>
-                   {{ alert.alert_type.alert_type }}<br>
-                   {{ alert.date }} <br>
-                  {% endfor %}
-              </form> 
           </li>
       {% endfor %}
     </ul>
@@ -111,7 +103,18 @@
     var alertModal = document.getElementById('modal{{ plant.up_id }}');
     alertModal.style.display = 'block';});
 
+  $('#modalsubmit{{plant.up_id }}').on('click',function() {
+    var alertModal = document.getElementById('modal{{ plant.up_id }}');
+    alertModal.style.display = 'none';
+    var modaldict = {user_plant_id: {{ plant.up_id }}, alert_type_id: $('{{ plant.up_id }}'), date: $('{{ plant.up_id }}')};
+    conosle.log modaldict
+    // $.post('/addalerts.json', modaldict, function(response){'#{{ plant.up_id }}'}.append())
+  })
+
 {% endfor %}
+
+
+ 
 </script>
 <script type='text/javascript'>
 'use strict';
@@ -123,6 +126,7 @@ var close = document.getElementsByClassName('close')[0];
 close.onclick = function() {
     console.log("clicked close");
     alertModal.style.display = 'none';
+
 }
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {

@@ -119,8 +119,7 @@ def user_info(user_id):
     load_plants = PlantType.query.all()
     load_alerts = AlertType.query.all()
     scheduled_alerts = Alert.query.all()
-    user_weekly_plants = UserPlant.query.all()
-    return render_template("user_info.html", user=user, load_plants=load_plants, load_alerts=load_alerts, scheduled_alerts=scheduled_alerts, user_weekly_plants=user_weekly_plants)
+    return render_template("user_info.html", user=user, load_plants=load_plants, load_alerts=load_alerts, scheduled_alerts=scheduled_alerts)
 
 
 @app.route('/addplants', methods=['POST'])
@@ -152,15 +151,13 @@ def add_plants():
 
     return redirect("/users/" + str(user_id))
 
-@app.route('/addalerts', methods=['POST'])
+@app.route('/addalerts.json', methods=['POST'])
 def add_alerts():
-    print "**********************", request.form['alert_type_id']
 
     user_plant_id = request.form.get('user_plant_id')
     alert_type_id = request.form.get('alert_type_id')
     date = request.form['date']
     user_id = session.get('user_id')
-    print user_id, "******************************"
 
 
     user_alert = Alert.query.filter_by(alert_type_id=alert_type_id, user_plant_id=user_plant_id, date=date ).all()
@@ -177,14 +174,16 @@ def add_alerts():
     db.session.commit()
     
 
-    return redirect("/users/" + str(user_id))
+    return jsonify(user_alert)
 
-@app.route('/alerts')
-def alert_display():
+# @app.route('/alerts')
+# def alert_display():
 
-    user_id = session.get('user_id')
+#     user_id = session.get('user_id')
+#     # user_alert = Alert.query.filter_by(alert_type_id=alert_type_id, user_plant_id=user_plant_id, date=date ).all()
 
-    return redirect("/users/" + str(user_id))
+
+#     return redirect("/users/" + str(user_id))
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
