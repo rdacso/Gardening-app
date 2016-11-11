@@ -159,9 +159,9 @@ def add_alerts():
     date = request.form['date']
     user_id = session.get('user_id')
 
-
     user_alert = Alert.query.filter_by(alert_type_id=alert_type_id, user_plant_id=user_plant_id, date=date ).all()
-    
+    plant_alert = {user_plant_id: 'user_plant_id', alert_type_id: 'alert_type_id', date: 'date'}
+
     #conditional that searches userplant table for existing plants. if it already exists, plant is left alone. if plant does not exist, it's added to the table.
     if user_alert:
         # user_alert.date = date
@@ -174,7 +174,7 @@ def add_alerts():
     db.session.commit()
     
 
-    return jsonify(user_alert)
+    return jsonify(plant_alert)
 
 # @app.route('/alerts')
 # def alert_display():
@@ -183,7 +183,18 @@ def add_alerts():
 #     # user_alert = Alert.query.filter_by(alert_type_id=alert_type_id, user_plant_id=user_plant_id, date=date ).all()
 
 
-#     return redirect("/users/" + str(user_id))
+    # return redirect("/users/" + str(user_id))
+
+# @app.route('/displayalerts.json', methods=['GET'])
+# def display_alerts():
+#     user_plant_id = request.form.get('user_plant_id')
+#     alert_type_id = request.form.get('alert_type_id')
+#     date = request.form['date']
+#     user_id = session.get('user_id')
+
+#     user_alert = Alert.query.filter_by(alert_type_id=alert_type_id, user_plant_id=user_plant_id, date=date ).all()
+
+#     data = ['']
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the

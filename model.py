@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 import datetime
 from sqlalchemy_utils import PhoneNumber
+import json
 
 
 # This is the connection to the PostgreSQL database; we're getting this through
@@ -128,10 +129,10 @@ class Alert(db.Model):
     alert = db.relationship('UserPlant', backref=db.backref('alerts'))
     alert_type = db.relationship('AlertType', backref=db.backref('alerts'))
 
-    def __repr__(self):
-        """Provide helpful representation when printed."""
+    # def __repr__(self):
+    #     """Provide helpful representation when printed."""
 
-        return "<Alert alert_id=%s user_plant_id=%s date=%s completion=%s alert_type_id=%s>" % (self.alert_id, self.user_plant_id, self.date, self.completion, self.alert_type_id)
+    #     return "<Alert alert_id=%s user_plant_id=%s date=%s completion=%s alert_type_id=%s>" % (self.alert_id, self.user_plant_id, self.date, self.completion, self.alert_type_id)
 
 ##############################################################################
 # Helper functions
