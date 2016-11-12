@@ -160,8 +160,6 @@ def add_alerts():
     user_id = session.get('user_id')
 
     user_alert = Alert.query.filter_by(alert_type_id=alert_type_id, user_plant_id=user_plant_id, date=date ).all()
-    plant_alert = {user_plant_id: 'user_plant_id', alert_type_id: 'alert_type_id', date: 'date'}
-
     #conditional that searches userplant table for existing plants. if it already exists, plant is left alone. if plant does not exist, it's added to the table.
     if user_alert:
         # user_alert.date = date
@@ -173,8 +171,12 @@ def add_alerts():
 
     db.session.commit()
     
+    return jsonify({'user_plant_id': user_plant_id,
+                    'alert_type_id': alert_type_id,
+                    'date': date
+                    })
 
-    return jsonify(plant_alert)
+
 
 # @app.route('/alerts')
 # def alert_display():

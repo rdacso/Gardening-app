@@ -109,17 +109,20 @@
       var alertModal = document.getElementById('modal{{ plant.up_id }}');
       alertModal.style.display = 'block';});
 
-    $('#modalsubmit{{plant.up_id }}').on('click',function(evt) {
-      evt.preventDefault();
+    $('#modalsubmit{{plant.up_id }}').on('submit', function() {
+      console.log('hi there');
       var alertModal = document.getElementById('modal{{ plant.up_id }}');
       alertModal.style.display = 'none';
+      console.log('sup dude');
       var modaldict = {user_plant_id: $('#{{ plant.up_id }}'), alert_type_id: $('#{{ plant.up_id }}'), date: $('#{{ plant.up_id }}')};
+      console.log('you clicked a thing');
       $.post('/addalerts.json', modaldict, function(data){
         if (data.length > 0) {
+          console.log('stuff');
           $('#alert{{ plant.up_id }}').append('<h2>Alerts</h2> <ul></ul>');
           var ul = $("#alert{{ plant.up_id }} ul");
         }
-
+        console.log('things');
         for (var i = 0; i < data.length; i++) {
             var html = '<li>' +
                     '<a href="/users/' + data[i]["user_id"] + '">' + data[i]["user_id"] + '</a>' +
