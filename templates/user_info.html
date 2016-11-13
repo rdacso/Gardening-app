@@ -73,15 +73,15 @@
                     <span class='close'>x</span>
 
                       <form action='/addalerts.json' method='POST' id='post-form'>
-                      <input type='hidden' value='{{ plant.up_id }}' name='user_plant_id'>
+                      <input type='hidden' value='{{ plant.up_id }}' id='hidden{{ plant.up_id }}' name='user_plant_id'>
                       <label>Please select the alert you wish to set.</label>
-                      <select id='{{ plant.up_id }}' name='alert_type_id'>
+                      <select id='form{{ plant.up_id }}' name='alert_type_id'>
                         {% for alert in load_alerts %}
                             <option value='{{ alert.alert_type_id }}'>{{ alert.alert_type }}</option>
                         {% endfor %}
                       </select><br>
-                      <label>Next care date: </label><input type='date' id='{{ plant.up_id }}' name='date'>
-                        <input type='submit' id='modalsubmit{{plant.up_id }}' >
+                      <label>Next care date: </label><input type='date' id='date{{ plant.up_id }}' name='date'>
+                        <input type='button' value="Submit" id='modalsubmit{{plant.up_id }}' >
                       </form>
 
                   </div>
@@ -109,21 +109,24 @@
       var alertModal = document.getElementById('modal{{ plant.up_id }}');
       alertModal.style.display = 'block';});
 
-    $('#modalsubmit{{plant.up_id }}').on('submit', function() {
+    $('#modalsubmit{{plant.up_id }}').on('click', function(evt) {
+      evt.preventDefault();
       console.log('hi there');
       var alertModal = document.getElementById('modal{{ plant.up_id }}');
       alertModal.style.display = 'none';
       console.log('sup dude');
-      var modaldict = {user_plant_id: $('#{{ plant.up_id }}'), alert_type_id: $('#{{ plant.up_id }}'), date: $('#{{ plant.up_id }}')};
-      console.log('you clicked a thing');
+      var modaldict = {user_plant_id: $('#hidden{{ plant.up_id }}').val(), alert_type_id: $('#form{{ plant.up_id }}').val(), date: $('#date{{ plant.up_id }}').val()};
+      console.log(modaldict);
       $.post('/addalerts.json', modaldict, function(data){
-        if (data.length > 0) {
+        if (data) {
           console.log('stuff');
-          $('#alert{{ plant.up_id }}').append('<h2>Alerts</h2> <ul></ul>');
           var ul = $("#alert{{ plant.up_id }} ul");
+          $('#alert{{ plant.up_id }}').append("<h2>Alerts</h2> <ul>" + modaldict + "</ul>");
+          
         }
-        console.log('things');
+        console.log(data.length, data);
         for (var i = 0; i < data.length; i++) {
+          console.log('for loop time')
             var html = '<li>' +
                     '<a href="/users/' + data[i]["user_id"] + '">' + data[i]["user_id"] + '</a>' +
                     'alert ' + data[i]["{{plant.up_id}}"] + '</li>';
