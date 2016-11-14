@@ -120,6 +120,11 @@ def user_info(user_id):
     load_plants = PlantType.query.all()
     load_alerts = AlertType.query.all()
     scheduled_alerts = Alert.query.all()
+    # alert_type_names = db.session.query(AlertType.alert_type, Alert.date).join(Alert).filter(Alert.user_plant_id==user_plant_id).all()
+    # alert_type_names.order_by('user_plant_id')
+
+    # for alert_type, date in alert_type_names:
+    #     print alert_type, date
     return render_template("user_info.html", user=user, load_plants=load_plants, load_alerts=load_alerts, scheduled_alerts=scheduled_alerts)
 
 
@@ -177,6 +182,7 @@ def add_alerts():
 
     db.session.commit()
     
+
     return jsonify({'user_plant_id': user_plant_id,
                     'alert_type_id': alert_type_id,
                     'date': date
