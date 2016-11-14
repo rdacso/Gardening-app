@@ -115,6 +115,7 @@ def user_list():
 def user_info(user_id):
     """shows user info"""
     #show user information based off user_id
+
     user = User.query.get(user_id)
     load_plants = PlantType.query.all()
     load_alerts = AlertType.query.all()
@@ -125,17 +126,17 @@ def user_info(user_id):
 @app.route('/addplants', methods=['POST'])
 def add_plants():
 
+
     #get form variables
     plant_id = request.form['plant_id']
     #get user session id
     user_id = session.get('user_id')
 
-    #check to see if user is logged in.
-    if not user_id:
-        raise Exception("No user logged in.")
+    if user_id:
+        user_plant = UserPlant.query.filter_by(user_id=user_id, plant_id=plant_id).first()
 
-    # query the userplant table for a specific plant id
-    user_plant = UserPlant.query.filter_by(user_id=user_id, plant_id=plant_id).first()
+    else:
+        raise Exception("No user logged in.")  
     
     #conditional that searches userplant table for existing plants. if it already exists, plant is left alone. if plant does not exist, it's added to the table.
     if user_plant:
@@ -159,7 +160,12 @@ def add_alerts():
     date = request.form['date']
     user_id = session.get('user_id')
 
-    user_alert = Alert.query.filter_by(alert_type_id=alert_type_id, user_plant_id=user_plant_id, date=date ).all()
+    if user_id:
+        user_alert = Alert.query.filter_by(alert_type_id=alert_type_id, user_plant_id=user_plant_id, date=date ).all()
+
+    else:
+        raise Exception("No user logged in.")  
+
     #conditional that searches userplant table for existing plants. if it already exists, plant is left alone. if plant does not exist, it's added to the table.
     if user_alert:
         # user_alert.date = date

@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 {% block content %}
 
@@ -99,16 +100,12 @@
 <script>
 // Get the button that opens the modal
 // When the user clicks on the button, open the modal 
-
   {% for plant in user.userplants %}
-
     var plants = '{{ plant.up_id }}';
     // displayAlerts(plants)
-
     $('#{{ plant.up_id }}').on('click',function() {
       var alertModal = document.getElementById('modal{{ plant.up_id }}');
       alertModal.style.display = 'block';});
-
     $('#modalsubmit{{plant.up_id }}').on('click', function(evt) {
       evt.preventDefault();
       console.log('hi there');
@@ -121,7 +118,7 @@
         if (data) {
           console.log('stuff');
           var ul = $("#alert{{ plant.up_id }} ul");
-          $('#alert{{ plant.up_id }}').append("<h2>Alerts</h2> <ul>" + modaldict + "</ul>");
+          $('#alert{{ plant.up_id }}').append("<h2>Alerts</h2> <ul>" + data.date, data.alert_type_id + "</ul>");
           
         }
         console.log(data.length, data);
@@ -136,25 +133,16 @@
         
       });
     });
-
     // $('#post-form').on('submit', function(event) {
     //   event.preventDefault();
     //   console.log('form submitted!')
     //   display_alert()
     // }
-
-
     // function displayAlerts() {
     //   console.log('display alerts is working!')
     //   console.log($('#post-text'))
     // }
-
-
-
-
   {% endfor %}
-
-
  
 </script>
 
@@ -162,19 +150,14 @@
 <script type='text/javascript'>
 'use strict';
 // Get the modal
-
 // Get the <span> element that closes the modal
 var close = document.getElementsByClassName('close')[0];
 // When the user clicks on <span> (x), close the modal
 close.onclick = function() {
     console.log("clicked close");
     alertModal.style.display = 'none';
-
 }
-
 </script>
 
 {% endblock %}
 
-#grab from html data value
-# in javascript in event listener - get data value and add it into the modal as a hidden element. 
