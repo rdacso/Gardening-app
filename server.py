@@ -181,6 +181,8 @@ def add_alerts():
         db.session.add(user_alert)
 
     db.session.commit()
+
+    return redirect("/users/" + str(user_id))
     
 
     return jsonify({'user_plant_id': user_plant_id,
