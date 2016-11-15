@@ -183,12 +183,26 @@ def add_alerts():
     
     return redirect("/users/" + str(user_id))
 
-    # return jsonify({'user_plant_id': user_plant_id,
-    #                 'alert_type_id': alert_type_id,
-    #                 'date': date
-    #                 })
+
+@app.route('/addqty', methods=['GET'])
+def add_qty():
+    qty = request.args.get('qty')
+    user_plant_id = request.args.get('user_plant_id')
+    user_id = session.get('user_id')
+
+    if user_id:
+        plant_number = UserPlant.query.filter_by(up_id=user_plant_id).first()
+        plant_number.qty = qty
+
+    else:
+        raise Exception("No user logged in.")  
 
 
+    flash('Quantity updated')
+    # db.session.add(plant_number)
+    db.session.commit()
+
+    return redirect("/users/" + str(user_id))
 
 
 if __name__ == "__main__":

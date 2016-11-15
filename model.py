@@ -47,7 +47,7 @@ class UserPlant(db.Model):
     __tablename__ = "userplants"
 
     up_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    alert_id = db.Column(db.Integer, unique=True)
+    alert_id = db.Column(db.Integer)
     plant_id = db.Column(db.Integer, db.ForeignKey('plants.plant_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     qty = db.Column(db.Integer)
