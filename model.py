@@ -112,7 +112,7 @@ class AlertType(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<AlertType alert_type_id=%s alert_type=%s>" % (self.alert_type_id, self.alert_type)
+        return "%s" % (self.alert_type)
 
 class Alert(db.Model):
     """Alerts on gardening website."""

@@ -55,10 +55,9 @@ def load_alerts():
     AlertType.query.delete()
     
 
-    for i, row in enumerate(open('seed_data/alerts.txt')):
+    for row in open('seed_data/alerts.txt'):
         row = row.rstrip()
-        alert_type = row.split()
-        alert = AlertType(alert_type=alert_type)
+        alert = AlertType(alert_type=row)
 
         db.session.add(alert)
     db.session.commit()

@@ -47,11 +47,10 @@ def register_process():
     city = request.form["city"]
     state = request.form["state"]
     zip_code = request.form["zip_code"]
-    alerts = request.form["alerts"]
     password = request.form["password"]
 
     #assign form variables to new_user variable
-    new_user = User(first_name=first_name, last_name=last_name, email=email, phone_number=phone_number, city=city, state=state, zip_code=zip_code, alerts=alerts, password=password)
+    new_user = User(first_name=first_name, last_name=last_name, email=email, phone_number=phone_number, city=city, state=state, zip_code=zip_code, password=password)
     #add new user to the database
     db.session.add(new_user)
     db.session.commit()
@@ -77,7 +76,7 @@ def confirm():
     email = request.form["email"]
     password = request.form["password"]
 
-    user = User.query.filter_by(email=email).first()
+    user = User.query.filter_by(user_id=user_id).first()
 
     if not user:
         flash("No such user")
@@ -181,8 +180,6 @@ def add_alerts():
         db.session.add(user_alert)
 
     db.session.commit()
-
-    return redirect("/users/" + str(user_id))
     
 
     return jsonify({'user_plant_id': user_plant_id,

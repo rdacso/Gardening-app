@@ -97,7 +97,6 @@
       {% endfor %}
     </ul>
 
-<a href='\alerts'> Please click here to access your alerts page </a><br>
 <a href='\'> Please click here to return to the homepage </a> 
 
 
@@ -107,9 +106,23 @@
 // When the user clicks on the button, open the modal 
   {% for plant in user.userplants %}
 
+  var alertModal = document.getElementById('modal{{ plant.up_id }}');
+  var close = document.getElementsByClassName('close')[0];
+
+  window.onclick = function(event) {
+    if (event.target == alertModal) {
+        alertModal.style.display = "none";
+    }
+}
+
   $('#{{ plant.up_id }}').on('click',function() {
-    var alertModal = document.getElementById('modal{{ plant.up_id }}');
     alertModal.style.display = 'block';});
+
+  $('.close').on('click', function() {
+    alertModal.style.display = "none";
+
+  });
+
 
    $('#modalsubmit{{plant.up_id }}').on('click', function(evt) {
       evt.preventDefault();
@@ -120,13 +133,10 @@
       var modaldict = {user_plant_id: $('#hidden{{ plant.up_id }}').val(), alert_type_id: $('#form{{ plant.up_id }}').val(), date: $('#date{{ plant.up_id }}').val()};
       console.log(modaldict);
       $.post('/addalerts.json', modaldict, function(data){
-        if (data) {
-          console.log('stuff');
-          var ul = $("#alert{{ plant.up_id }} ul");
-        //   $('#alert{{ plant.up_id }}').append("<h2>Alerts</h2>" + "<ul>" + data.user_plant_id, data.date, data.alert_type_id + "</ul>");
-         }
+        console.log(data);
+      }
         
-      });
+      );
     });
  
   {% endfor %}
@@ -137,17 +147,10 @@
 <script type='text/javascript'>
 'use strict';
 // Get the modal
-// Get the <span> element that closes the modal
-var close = document.getElementsByClassName('close')[0];
-// When the user clicks on <span> (x), close the modal
-close.onclick = function() {
-     console.log("clicked close");
-     alertModal.style.display = 'none';
- };
 
- window.onclick = function(event) {
-     console.log("clicked window");
-};
+
+
+ 
 
 </script>
 
