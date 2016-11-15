@@ -38,6 +38,10 @@
     text-decoration: none;
     cursor: pointer;
 }
+
+#plant_common_name {
+
+}
 </style>
 <h1>Welcome {{ user.first_name }} {{ user.last_name }}!</h1>
 
@@ -59,8 +63,8 @@
  <ul>
       {% for plant in user.userplants %}
           <li>
-              <a>
-                {{ plant.plant_type.common_name }} 
+              <a id='plant_common_name'>
+                <b>{{ plant.plant_type.common_name }}</b> 
                 <!-- Trigger/Open The Modal -->
               </a>
               <!-- Trigger/Open The Modal -->
@@ -73,7 +77,7 @@
                   <div class='modal-content'>
                     <span class='close'>x</span>
 
-                      <form action='/addalerts.json' method='POST' id='post-form'>
+                      <form action='/addalerts' method='POST' id='post-form'>
                       <input type='hidden' value='{{ plant.up_id }}' id='hidden{{ plant.up_id }}' name='user_plant_id'>
                       <label>Please select the alert you wish to set.</label>
                       <select id='form{{ plant.up_id }}' name='alert_type_id'>
@@ -82,7 +86,7 @@
                         {% endfor %}
                       </select><br>
                       <label>Next care date: </label><input type='date' id='date{{ plant.up_id }}' name='date'>
-                        <input type='button' value="Submit" id='modalsubmit{{plant.up_id }}' >
+                        <input type='submit' value="Submit" id='modalsubmit{{plant.up_id }}' >
                       </form>
 
                   </div>
@@ -90,8 +94,9 @@
                 <div id='alert{{ plant.up_id }}'> </div>
                 <input type='hidden' value='{{ plant.up_id }}' id='hidden{{ plant.up_id }}' name='user_plant_id'>
                 {% for alert in plant.alerts: %}
-                  <ul> alerts {{ alert.alert_type }}</ul>
-                  <ul> date: {{ alert.date }} </ul>
+                  <ul> ALERT: {{ alert.alert_type }}</ul>
+                  <ul> DATE: {{ alert.date }} </ul>
+                  ==================================================
                 {% endfor %}
           </li>
       {% endfor %}
@@ -124,21 +129,6 @@
   });
 
 
-   $('#modalsubmit{{plant.up_id }}').on('click', function(evt) {
-      evt.preventDefault();
-      console.log('hi there');
-      var alertModal = document.getElementById('modal{{ plant.up_id }}');
-      alertModal.style.display = 'none';
-      console.log('sup dude');
-      var modaldict = {user_plant_id: $('#hidden{{ plant.up_id }}').val(), alert_type_id: $('#form{{ plant.up_id }}').val(), date: $('#date{{ plant.up_id }}').val()};
-      console.log(modaldict);
-      $.post('/addalerts.json', modaldict, function(data){
-        console.log(data);
-      }
-        
-      );
-    });
- 
   {% endfor %}
  
 </script>
