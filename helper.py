@@ -8,15 +8,13 @@ import math
 def load_all_alerts_types():
     """returns alert types available in db """
     load_alerts = set(AlertType.query.all())
-    load_alerts = sorted(list(load_alerts))
 
     return load_alerts
 
 def load_all_plant_types():
     """returns all plant types available in db """
     load_plants = set(PlantType.query.all())
-    load_plants = sorted(list(load_plants))
-
+    
     return load_plants
 
 # add records to the database

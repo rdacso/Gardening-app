@@ -3,7 +3,7 @@
 from jinja2 import StrictUndefined
 
 from datetime import datetime
-from flask import Flask, jsonify,render_template, redirect, request, flash, session
+from flask import Flask, jsonify,render_template, redirect, request, flash, session, json
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import User, UserPlant, PlantType, AlertType, Alert, connect_to_db, db
@@ -110,6 +110,22 @@ def user_list():
     users = User.query.all()
     return render_template("user_list.html", users=users)
 
+@app.route('/plants')
+def plant_list():
+    """show list of plants """
+
+    plants = PlantType.query.all()
+    return render_template('plant_list.html', plants=plants)
+
+
+app.route('/plants/<int:plant_id>')
+def plant_info(plant_id):
+    """shows plant info"""
+    plant_info = PlantType.query.filter_by(plant_id).all()
+
+    return render_template('plant_info.html', plant_info=plant_info)
+
+
 @app.route('/users/<int:user_id>')
 def user_info(user_id):
     """shows user info"""
@@ -184,14 +200,17 @@ def add_alerts():
     return redirect("/users/" + str(user_id))
 
 
-@app.route('/addqty', methods=['GET'])
+@app.route('/addqty.json', methods=['POST'])
 def add_qty():
-    qty = request.args.get('qty')
-    user_plant_id = request.args.get('user_plant_id')
+    qty = request.form.get('qty')
+    user_plant_id = request.form.get('user_plant_id')
+
+    print "user_plant_id", user_plant_id
+
     user_id = session.get('user_id')
 
     if user_id:
-        plant_number = UserPlant.query.filter_by(up_id=user_plant_id).first()
+        plant_number = UserPlant.query.get(user_plant_id)
         plant_number.qty = qty
 
     else:
@@ -202,7 +221,7 @@ def add_qty():
     # db.session.add(plant_number)
     db.session.commit()
 
-    return redirect("/users/" + str(user_id))
+    return jsonify({'qty' : qty, 'user_plant_id': user_plant_id})
 
 
 if __name__ == "__main__":

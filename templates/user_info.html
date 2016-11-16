@@ -39,9 +39,7 @@
     cursor: pointer;
 }
 
-#plant_common_name {
 
-}
 </style>
 <h1>Welcome {{ user.first_name }} {{ user.last_name }}!</h1>
 
@@ -65,25 +63,23 @@
           <li>
               <a id='plant_common_name'>
                 <b>{{ plant.plant_type.common_name }}</b> 
-              <form action='/addqty' id='form{{ plant.qty }}'>
-                <input type='hidden' value='{{ plant.up_id }}' id='hidden{{ plant.up_id }}' name='user_plant_id'>
-                <ul> QTY: <input type='text' id='qty{{ plant.qty }}' name='qty'> <input type='submit' id='submit{{ plant.qty }}'></ul> 
-                <div id='number_of_plants{{ plant.qty }}'></div>
 
-                <!-- Trigger/Open The Modal -->
-              </a>
-              <!-- Trigger/Open The Modal -->
-                <button id='{{ plant.up_id }}' class='alertButton' name='user_plant'>Alert</button>
+              <form action='/addqty.json' method='POST' class='agileform'>
+                <input type='hidden' value='{{ plant.up_id }}' id='qtyhidden{{ plant.up_id }}' name='user_plant_id'>
+                <ul> QTY: <input type='number' id='qty{{ plant.up_id }}' name='qty'> <input type='button' value='submit' id='submit{{ plant.up_id }}'></ul> 
+              </form>
 
-                <!-- The Modal -->
-                <div id='modal{{ plant.up_id }}' class='modal'>
+          <!-- Trigger/Open The Modal -->
+          <button id="{{ plant.up_id }}" class='modalbutton'>Alert</button>
 
-                  <!-- Modal content -->
-                  <div class='modal-content'>
-                    <span class='close'>x</span>
+          <!-- The Modal -->
+          <div id="modal{{ plant.up_id }}" class="modal">
 
-                      <form action='/addalerts' method='POST'>
-                      <input type='hidden' value='{{ plant.up_id }}' id='hidden{{ plant.up_id }}' name='user_plant_id'>
+            <!-- Modal content -->
+            <div class="modal-content">
+              <span class="close">x</span>
+              <form action='/addalerts' method='POST' class='userform'>
+                      <input type='hidden' value='{{ plant.up_id }}' id='modalhidden{{ plant.up_id }}' name='user_plant_id'>
                       <label>Please select the alert you wish to set.</label>
                       <select id='select{{ plant.up_id }}' name='alert_type_id'>
                         {% for alert in load_alerts %}
@@ -91,20 +87,19 @@
                         {% endfor %}
                       </select><br>
                       <label>Next care date: </label><input type='date' id='date{{ plant.up_id }}' name='date'>
-                        <input type='submit' value="Submit" id='modalsubmit{{plant.up_id }}' >
-                      </form>
-
-                  </div>
-                </div> 
-                <div id='alert{{ plant.up_id }}'> </div>
-                <input type='hidden' value='{{ plant.up_id }}' id='hidden{{ plant.up_id }}' name='user_plant_id'>
+                        <input type='submit' id='modalsubmit{{plant.up_id }}'>
+              </form>
+            </div>
+            <!--Display the alerts for each specific plant -->
+          </div>
+              <div id='alert{{ plant.up_id }}'> 
+                <input type='hidden' value='{{ plant.up_id }}' id='alerthidden{{ plant.up_id }}' name='user_plant_id'>
                 {% for alert in plant.alerts: %}
                   <ul> ALERT: {{ alert.alert_type }}</ul>
                   <ul> DATE: {{ alert.date }} </ul>
                   ==================================================
-                  
                 {% endfor %}
-          </li>
+              </div>
 
       {% endfor %}
     </ul>
@@ -112,43 +107,8 @@
 <a href='\'> Please click here to return to the homepage </a> 
 
 
-<script src='https://code.jquery.com/jquery.js'></script>
-<script>
-// Get the button that opens the modal
-// When the user clicks on the button, open the modal 
-  {% for plant in user.userplants %}
-
-  var alertModal = document.getElementById('modal{{ plant.up_id }}');
-  var close = document.getElementsByClassName('close')[0];
-
-  window.onclick = function(event) {
-    if (event.target == alertModal) {
-        alertModal.style.display = "none";
-    }
-}
-
-  $('#{{ plant.up_id }}').on('click',function() {
-    alertModal.style.display = 'block';});
-
-  $('.close').on('click', function() {
-    alertModal.style.display = "none";
-
-  });
-
-  {% endfor %}
- 
-</script>
 
 
-<script type='text/javascript'>
-'use strict';
-// Get the modal
-
-
-
- 
-
-</script>
 
 {% endblock %}
 
