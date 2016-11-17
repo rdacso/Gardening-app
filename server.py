@@ -200,7 +200,7 @@ def add_alerts():
     return redirect("/users/" + str(user_id))
 
 
-@app.route('/addqty', methods=['POST'])
+@app.route('/addqty.json', methods=['POST'])
 def add_qty():
     qty = request.form.get('qty')
     user_plant_id = request.form.get('user_plant_id')
@@ -221,7 +221,7 @@ def add_qty():
     # db.session.add(plant_number)
     db.session.commit()
 
-    return redirect("/users/" + str(user_id))
+    return jsonify({'user_plant_id':user_plant_id, 'qty':qty})
 
 @app.route('/completealert', methods=['POST'])
 def complete_alert():

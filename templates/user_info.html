@@ -39,6 +39,17 @@
     cursor: pointer;
 }
 
+.input[type=text] {
+    width: 130px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+/* When the input field gets focus, change its width to 100% */
+input[type=text]:focus {
+    width: 100%;
+}
+
 
 </style>
 <h1>Welcome {{ user.first_name }} {{ user.last_name }}!</h1>
@@ -58,17 +69,20 @@
 
 <h2>These are the plants in your garden!</h2>
 
+<input type="text" name="search" placeholder="Search..">
+
  <ul>
       {% for plant in user.userplants %}
           <li>
               <a id='plant_common_name'>
                 <b>{{ plant.plant_type.common_name }}</b> 
 
-              <form action='/addqty' method='POST' class='userform'>
+              <form action='/addqty.json' method='POST' class='ajaxform'>
                 <input type='hidden' value='{{ plant.up_id }}' id='qtyhidden{{ plant.up_id }}' name='user_plant_id'>
                 <ul> QTY: <input type='number' id='qty{{ plant.up_id }}' name='qty'> <input type='submit' class='qtysubmit' id='qtysubmit{{ plant.up_id }}'></ul> 
               </form>
-                  <ul> quantity: {{ plant.qty }}</ul>
+                <div id='number_of_plants'> </div>
+                <div> {{plant.qty}} </div>
 
           <!-- Trigger/Open The Modal -->
           <button id="{{ plant.up_id }}" class='modalbutton'>Alert</button>
@@ -93,14 +107,14 @@
             </div>
             <!--Display the alerts for each specific plant -->
           </div>
-              <div id='alert{{ plant.up_id }}' class='alertinfo'> 
-                <input type='hidden' value='{{ plant.up_id }}' id='alerthidden{{ plant.up_id }}' name='user_plant_id'>
+              <div id='alert{{ plant.up_id }}' class='alertinfo' id='alertinfo{{ plant.up_id }}'> 
+                <input type='hidden' value='{{ plant.up_id }}' id='alerthidden{{ plant.up_id }}' name='user_plant_id' class='completetheform'>
                 {% for alert in plant.alerts: %}
                   <ul> ALERT: {{ alert.alert_type }}</ul>
                   <ul> DATE: {{ alert.date }} </ul>
                   <form action='/completealert' method='POST' class='userform'>
                     <input type='hidden' value='{{ plant.up_id }}' id='completionhidden{{ plant.up_id }}' name='user_plant_id'>
-                    <input type='checkbox' name='completion' class = alertcomplete id=alertcomplete'{{ plant.up_id }}'' value='True'> Task Completed
+                    <input type='checkbox' name='completion' class = completedalert id=alertcomplete'{{ plant.up_id }}'' value='True'> Task Completed
                   </form>
                   ==================================================
                 {% endfor %}
@@ -119,33 +133,43 @@
 'use strict';
 // when submit button is clicked on an ajax form, run the ajax call
 
-function hide_task(){
-
+function displayQty(response){
+  var user_plant_id = response['user_plant_id'];
+  console.log('1');
+  var qty = response['qty'];
+  console.log('#2');
+  $('#number_of_plants').html('');
+  console.log('#3');
+  $('#number_of_plants').html('<div>' + qty + '</div>');
 }
 
-  $(".agileform").on("submit", function(evt){
-      evt.preventDefault();
-      console.log($(this));
-      var formInputs = $(this).serialize();
-      console.log(formInputs);
-      $.post('/addqty.json', formInputs, displayInfo);
-  })
+function addNum(evt){
+  evt.preventDefault();
+  var btn = $(evt.currentTarget);
+  console.log('#4')
+  var form = btn.closest('form');
+  console.log('#5')
+  var qty = form.find('input[name="qty"]').val();
+  console.log('#6')
+  console.log($(this));
+  var formInputs = $(this).serialize();
+  console.log(formInputs);
 
-function displayInfo(result){
+  $.post('/addqty.json', formInputs, displayQty);
+  console.log('#7');
+}
+  
+$('.ajaxform').on('submit', addNum);
+
+
+
+$('.alertinfo').on('click', function(){
   var id = $(this).attr('id');
-  console.log('id')
-  $('#submit'+ id).css('display', 'block');
-}
-
-$('.qtysubmit').on('submit', displayInfo);
-
-  $("input").change(function(){
-      var task_completion = $(this).val();
-      if(task_completion == 'True'){
-          $(".alertinfo").hide();
-      }
+  if 
+    $("#alert" + id).hide();
 
 });
+
 
 </script>
 {% endblock %}
