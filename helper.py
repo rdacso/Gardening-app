@@ -21,8 +21,8 @@ def load_all_plant_types():
 #########################################
 def add_plants(user_id, plant_id):
     """Search the userplant table for existing plants. If it exists, plant is left alone. If plant does not exist, it is added."""
+    user_plant= UserPlant.query.filter_by(user_id=user_id, plant_id=plant_id).order_by(UserPlant.plant_id).all()
 
-    user_plant = UserPlant.query.filter_by(user_id=user_id, plant_id=plant_id).first()
 
     if user_plant:
         user_plant.plant_id == plant_id

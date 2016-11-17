@@ -81,8 +81,8 @@ input[type=text]:focus {
                 <input type='hidden' value='{{ plant.up_id }}' id='qtyhidden{{ plant.up_id }}' name='user_plant_id'>
                 <ul> QTY: <input type='number' id='qty{{ plant.up_id }}' name='qty'> <input type='submit' class='qtysubmit' id='qtysubmit{{ plant.up_id }}'></ul> 
               </form>
-                <div id='number_of_plants'> </div>
-                <div> {{plant.qty}} </div>
+                <div class='number_of_plants' id='plant_number{{ plant.up_id }}'>{{plant.qty}}</div>
+                <!-- <div class='database_plant_number' name='hideme'> </div> -->
 
           <!-- Trigger/Open The Modal -->
           <button id="{{ plant.up_id }}" class='modalbutton'>Alert</button>
@@ -134,23 +134,15 @@ input[type=text]:focus {
 // when submit button is clicked on an ajax form, run the ajax call
 
 function displayQty(response){
-  var user_plant_id = response['user_plant_id'];
-  console.log('1');
   var qty = response['qty'];
-  console.log('#2');
-  $('#number_of_plants').html('');
-  console.log('#3');
-  $('#number_of_plants').html('<div>' + qty + '</div>');
+  console.log('qty');
+  var div_id = "#plant_number" + response['user_plant_id'];
+  console.log(div_id);
+  $(div_id).html('<div>' + qty + '</div>');
 }
 
 function addNum(evt){
   evt.preventDefault();
-  var btn = $(evt.currentTarget);
-  console.log('#4')
-  var form = btn.closest('form');
-  console.log('#5')
-  var qty = form.find('input[name="qty"]').val();
-  console.log('#6')
   console.log($(this));
   var formInputs = $(this).serialize();
   console.log(formInputs);
@@ -161,14 +153,6 @@ function addNum(evt){
   
 $('.ajaxform').on('submit', addNum);
 
-
-
-$('.alertinfo').on('click', function(){
-  var id = $(this).attr('id');
-  if 
-    $("#alert" + id).hide();
-
-});
 
 
 </script>
