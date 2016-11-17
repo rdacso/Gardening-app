@@ -200,7 +200,7 @@ def add_alerts():
     return redirect("/users/" + str(user_id))
 
 
-@app.route('/addqty.json', methods=['POST'])
+@app.route('/addqty', methods=['POST'])
 def add_qty():
     qty = request.form.get('qty')
     user_plant_id = request.form.get('user_plant_id')
@@ -221,7 +221,30 @@ def add_qty():
     # db.session.add(plant_number)
     db.session.commit()
 
-    return jsonify({'qty' : qty, 'user_plant_id': user_plant_id})
+    return redirect("/users/" + str(user_id))
+
+@app.route('/completealert', methods=['POST'])
+def complete_alert():
+    completion = request.form.get('completion')
+    user_plant_id = request.form.get('user_plant_id')
+
+    print "user_plant_id", user_plant_id
+
+    user_id = session.get('user_id')
+
+    if user_id:
+        alert_completion = Alert.query.get(user_plant_id)
+        alert_completion.completion = completion
+
+    else:
+        raise Exception("No user logged in.")  
+
+
+    flash('Task status updated')
+    # db.session.add(plant_number)
+    db.session.commit()
+
+    return redirect("/users/" + str(user_id))
 
 
 if __name__ == "__main__":

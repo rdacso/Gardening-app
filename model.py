@@ -47,7 +47,6 @@ class UserPlant(db.Model):
     __tablename__ = "userplants"
 
     up_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    alert_id = db.Column(db.Integer)
     plant_id = db.Column(db.Integer, db.ForeignKey('plants.plant_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     qty = db.Column(db.Integer)
@@ -122,7 +121,7 @@ class Alert(db.Model):
     alert_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_plant_id = db.Column(db.Integer, db.ForeignKey('userplants.up_id'))
     date = db.Column(db.DateTime)
-    completion = db.Column(db.Boolean)
+    completion = db.Column(db.Boolean, default='False')
     alert_type_id = db.Column(db.Integer, db.ForeignKey('alerttype.alert_type_id'))
 
 

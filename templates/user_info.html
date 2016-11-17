@@ -64,10 +64,11 @@
               <a id='plant_common_name'>
                 <b>{{ plant.plant_type.common_name }}</b> 
 
-              <form action='/addqty.json' method='POST' class='agileform'>
+              <form action='/addqty' method='POST' class='userform'>
                 <input type='hidden' value='{{ plant.up_id }}' id='qtyhidden{{ plant.up_id }}' name='user_plant_id'>
-                <ul> QTY: <input type='number' id='qty{{ plant.up_id }}' name='qty'> <input type='button' value='submit' id='submit{{ plant.up_id }}'></ul> 
+                <ul> QTY: <input type='number' id='qty{{ plant.up_id }}' name='qty'> <input type='submit' class='qtysubmit' id='qtysubmit{{ plant.up_id }}'></ul> 
               </form>
+                  <ul> quantity: {{ plant.qty }}</ul>
 
           <!-- Trigger/Open The Modal -->
           <button id="{{ plant.up_id }}" class='modalbutton'>Alert</button>
@@ -92,13 +93,18 @@
             </div>
             <!--Display the alerts for each specific plant -->
           </div>
-              <div id='alert{{ plant.up_id }}'> 
+              <div id='alert{{ plant.up_id }}' class='alertinfo'> 
                 <input type='hidden' value='{{ plant.up_id }}' id='alerthidden{{ plant.up_id }}' name='user_plant_id'>
                 {% for alert in plant.alerts: %}
                   <ul> ALERT: {{ alert.alert_type }}</ul>
                   <ul> DATE: {{ alert.date }} </ul>
+                  <form action='/completealert' method='POST' class='userform'>
+                    <input type='hidden' value='{{ plant.up_id }}' id='completionhidden{{ plant.up_id }}' name='user_plant_id'>
+                    <input type='checkbox' name='completion' class = alertcomplete id=alertcomplete'{{ plant.up_id }}'' value='True'> Task Completed
+                  </form>
                   ==================================================
                 {% endfor %}
+
               </div>
 
       {% endfor %}
@@ -107,8 +113,40 @@
 <a href='\'> Please click here to return to the homepage </a> 
 
 
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
 
+<script type='text/javascript'>
+'use strict';
+// when submit button is clicked on an ajax form, run the ajax call
 
+function hide_task(){
 
+}
+
+  $(".agileform").on("submit", function(evt){
+      evt.preventDefault();
+      console.log($(this));
+      var formInputs = $(this).serialize();
+      console.log(formInputs);
+      $.post('/addqty.json', formInputs, displayInfo);
+  })
+
+function displayInfo(result){
+  var id = $(this).attr('id');
+  console.log('id')
+  $('#submit'+ id).css('display', 'block');
+}
+
+$('.qtysubmit').on('submit', displayInfo);
+
+  $("input").change(function(){
+      var task_completion = $(this).val();
+      if(task_completion == 'True'){
+          $(".alertinfo").hide();
+      }
+
+});
+
+</script>
 {% endblock %}
 
