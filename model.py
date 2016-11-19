@@ -55,8 +55,8 @@ class UserPlant(db.Model):
     plant_type = db.relationship("PlantType",
                             backref=db.backref("userplants"))
     user = db.relationship("User",
-
-                           backref=db.backref("userplants"))
+                           backref=db.backref("userplants", 
+                           order_by="UserPlant.plant_id"))
 
     def __repr__(self):
         """Provide helpful representation when printed."""

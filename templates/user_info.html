@@ -46,11 +46,16 @@
 }
 
 /* When the input field gets focus, change its width to 100% */
+.input[type=text] {
+    width: 130px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+/* When the input field gets focus, change its width to 100% */
 input[type=text]:focus {
     width: 100%;
 }
-
-
 </style>
 <h1>Welcome {{ user.first_name }} {{ user.last_name }}!</h1>
 
@@ -69,7 +74,7 @@ input[type=text]:focus {
 
 <h2>These are the plants in your garden!</h2>
 
-<input type="text" name="search" placeholder="Search..">
+<input type="text" name="search" placeholder="Search.."> <input type='submit'>
 
  <ul>
       {% for plant in user.userplants %}
@@ -107,17 +112,23 @@ input[type=text]:focus {
             </div>
             <!--Display the alerts for each specific plant -->
           </div>
-              <div id='alert{{ plant.up_id }}' class='alertinfo' id='alertinfo{{ plant.up_id }}'> 
+              <div id='alert{{ plant.up_id }}' class='alertinfo'> 
                 <input type='hidden' value='{{ plant.up_id }}' id='alerthidden{{ plant.up_id }}' name='user_plant_id' class='completetheform'>
                 {% for alert in plant.alerts: %}
+                {% if alert.completion != True %}
+                <div id='divalert{{ alert.alert_id }}'>
                   <ul> ALERT: {{ alert.alert_type }}</ul>
                   <ul> DATE: {{ alert.date }} </ul>
-                  <form action='/completealert' method='POST' class='userform'>
+                  <form action='/completealert.json' method='POST' class='alertajaxform'>
                     <input type='hidden' value='{{ plant.up_id }}' id='completionhidden{{ plant.up_id }}' name='user_plant_id'>
-                    <input type='checkbox' name='completion' class = completedalert id=alertcomplete'{{ plant.up_id }}'' value='True'> Task Completed
+                    <input type='checkbox' name='completion' class='completedalert' id='{{ alert.alert_id }}' value='True'> Task Completed
                   </form>
                   ==================================================
+                </div>  
+                  
+                  {% endif %}
                 {% endfor %}
+
 
               </div>
 
@@ -152,6 +163,41 @@ function addNum(evt){
 }
   
 $('.ajaxform').on('submit', addNum);
+
+console.log($('#input#5'))
+function completeTask(){
+  var checkboxid = $(this).attr('id');
+  console.log(this);
+  var id = 'divalert'+ checkboxid;
+  console.log(id);
+  if($(this).prop(":checked"));{  
+    console.log('3');
+    $('#'+ id).hide();
+    console.log('4');
+  }
+}
+
+$('.completedalert').on('click', completeTask)
+
+function hideAlert(response){
+  var completion = response['completion'];
+  console.log('5');
+  var div_id = "#alert" + response['user_plant_id'];
+  console.log('6');
+}
+
+function addAlertCompletion(evt){
+  evt.preventDefault();
+  console.log('7')
+  var formInputs = $(this).serialize();
+  console.log(formInputs);
+  console.log('8');
+  $.post('/completealert.json', formInputs, hideAlert);
+  console.log('9');
+}
+  
+$('.alertajaxform').on('click', addAlertCompletion);
+console.log('10');
 
 
 

@@ -22,9 +22,8 @@ def load_plants():
 
     for i, row in enumerate(open('seed_data/plants.txt')):
         row = row.strip('"')
-        row = row.rstrip()
+        row = row.rstrip().capitalize()
         common_name, duration, active_growth_period, flower_color, flower_conspicuous, foliage_color, height, adapted_to_coarse_textured_soil, adapted_to_medium_textured_soil, adapted_to_fine_textured_soil, drought_tolerance, fertility_requirement, soil_ph_min, soil_ph_max, shade_tolerance, temperateure_min   = row.split('","')
-
         if common_name and duration and active_growth_period and flower_color and flower_conspicuous and foliage_color and height and adapted_to_coarse_textured_soil and adapted_to_medium_textured_soil and adapted_to_fine_textured_soil and drought_tolerance and fertility_requirement and soil_ph_min and soil_ph_max and shade_tolerance and temperateure_min:
             plant = PlantType(common_name=common_name,
                         duration=duration,

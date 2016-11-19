@@ -6,6 +6,7 @@ from datetime import datetime
 from flask import Flask, jsonify,render_template, redirect, request, flash, session, json
 from flask_debugtoolbar import DebugToolbarExtension
 
+
 from model import User, UserPlant, PlantType, AlertType, Alert, connect_to_db, db
 
 from helper import load_all_plant_types, load_all_alerts_types
@@ -223,17 +224,18 @@ def add_qty():
 
     return jsonify({'user_plant_id':user_plant_id, 'qty':qty})
 
-@app.route('/completealert', methods=['POST'])
+@app.route('/completealert.json', methods=['POST'])
 def complete_alert():
-    completion = request.form.get('completion')
+
+    completion = bool(request.form.get('completion'))
     user_plant_id = request.form.get('user_plant_id')
-
-    print "user_plant_id", user_plant_id
-
+    print user_plant_id
+    print type(completion)
     user_id = session.get('user_id')
 
     if user_id:
         alert_completion = Alert.query.get(user_plant_id)
+        print '************',alert_completion
         alert_completion.completion = completion
 
     else:
@@ -244,7 +246,12 @@ def complete_alert():
     # db.session.add(plant_number)
     db.session.commit()
 
-    return redirect("/users/" + str(user_id))
+    return jsonify({'completion':completion, 'user_plant_id':user_plant_id})
+
+@app.route('/searchbox', methods=['GET'])
+def search_function():
+
+    search_plants(user_id, plant_id)
 
 
 if __name__ == "__main__":
