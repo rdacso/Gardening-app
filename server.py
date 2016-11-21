@@ -3,20 +3,19 @@
 from jinja2 import StrictUndefined
 
 from datetime import datetime
-from flask import Flask, jsonify,render_template, redirect, request, flash, session, json 
-from flask.ext.login import login_user, logout_user, current_user, login_required
+from flask import Flask, jsonify,render_template, redirect, request, flash, session, json, url_for
+from werkzeug.utils import secure_filename
 from flask_debugtoolbar import DebugToolbarExtension
-
-
 
 from model import User, UserPlant, PlantType, AlertType, Alert, connect_to_db, db
 
 from helper import load_all_plant_types, load_all_alerts_types
 
-
+UPLOAD_FOLDER = '../static/'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__)
-
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC"
 
@@ -27,6 +26,9 @@ app.secret_key = "ABC"
 app.jinja_env.undefined = StrictUndefined
 app.jinja_env.auto_reload = True
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 @app.route('/')
 def index():
@@ -121,7 +123,12 @@ def plant_list():
     """show list of plants """
 
     plants = PlantType.query.all()
+
     return render_template('plant_list.html', plants=plants)
+
+@app.route('/displayplant/<filename>')
+def upload_plant_image(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
 
 
 app.route('/plants/<int:plant_id>')

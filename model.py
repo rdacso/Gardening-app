@@ -89,7 +89,8 @@ class PlantType(db.Model):
     soil_ph_min = db.Column(db.Float)
     soil_ph_max = db.Column(db.Float)
     shade_tolerance = db.Column(db.String)
-    temperateure_min = db.Column(db.Integer)
+    temperature_min = db.Column(db.Integer)
+    plant_image = db.Column(db.LargeBinary)
 
 
 
