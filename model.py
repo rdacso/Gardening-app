@@ -7,6 +7,8 @@ from sqlalchemy_utils import PhoneNumber
 import json
 
 
+
+
 # This is the connection to the PostgreSQL database; we're getting this through
 # the Flask-SQLAlchemy helper library. On this, we can find the `session`
 # object, where we do most of our interactions (like committing, etc.)
@@ -33,6 +35,8 @@ class User(db.Model):
     zip_code = db.Column(db.String(15))
     tmz = db.Column(db.DateTime, default=datetime.datetime.utcnow())
     alerts = db.Column(db.Boolean, default=True)
+
+
 
 
     def __repr__(self):

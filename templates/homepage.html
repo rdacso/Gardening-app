@@ -1,20 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Welcome!</h1>
+<h1>Welcome to Green Light</h1><br>
+<h3>Log In Here!</h3>
 
-<h2>Plants</h2>
-<p><a href="/plants">View all plants</a></p>
+<form action='/login' method='POST'>
+      <label> Email </label><input type='text' name='email'><br>
+      <label> Password </label><input type='text' name='password'><br>
+      <input type="submit">
+</form>
 
-<h2>Users</h2>
-<p><a href="/users">View all users</a></p>
-
-<h2>Log In</h2>
-<p><a href="/login">Log in here</a></p>
-
-<h2>Log Out</h2>
-<p><a href="/logout">Log out</a></p>
-
-
-
+<a href='/register'> Create your Green Light account </a>
 {% endblock %}

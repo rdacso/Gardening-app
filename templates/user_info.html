@@ -2,61 +2,9 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<style type='text/css'>
-    /* The Modal (background) */
-/* The Modal (background) */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-/* Modal Content/Box */
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
-}
-/* The Close Button */
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
 
-.input[type=text] {
-    width: 130px;
-    -webkit-transition: width 0.4s ease-in-out;
-    transition: width 0.4s ease-in-out;
-}
 
-/* When the input field gets focus, change its width to 100% */
-.input[type=text] {
-    width: 130px;
-    -webkit-transition: width 0.4s ease-in-out;
-    transition: width 0.4s ease-in-out;
-}
 
-/* When the input field gets focus, change its width to 100% */
-input[type=text]:focus {
-    width: 100%;
-}
-</style>
 <h1>Welcome {{ user.first_name }} {{ user.last_name }}!</h1>
 
 <h2>Plants</h2>
@@ -79,12 +27,12 @@ input[type=text]:focus {
  <ul>
       {% for plant in user.userplants %}
           <li>
-              <a id='plant_common_name'>
+              <div id='plant_common_name'>
                 <b>{{ plant.plant_type.common_name }}</b> 
 
               <form action='/addqty.json' method='POST' class='ajaxform'>
                 <input type='hidden' value='{{ plant.up_id }}' id='qtyhidden{{ plant.up_id }}' name='user_plant_id'>
-                <ul> QTY: <input type='number' id='qty{{ plant.up_id }}' name='qty'> <input type='submit' class='qtysubmit' id='qtysubmit{{ plant.up_id }}'></ul> 
+                <p>QTY: <input type='number' id='qty{{ plant.up_id }}' name='qty'> <input type='submit' class='qtysubmit' id='qtysubmit{{ plant.up_id }}'></p> 
               </form>
                 <div class='number_of_plants' id='plant_number{{ plant.up_id }}'>{{plant.qty}}</div>
                 <!-- <div class='database_plant_number' name='hideme'> </div> -->
@@ -133,74 +81,17 @@ input[type=text]:focus {
               </div>
 
       {% endfor %}
+        </div>
+      </li>
     </ul>
 
 <a href='\'> Please click here to return to the homepage </a> 
 
 
 <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
-
-<script type='text/javascript'>
-'use strict';
-// when submit button is clicked on an ajax form, run the ajax call
-
-function displayQty(response){
-  var qty = response['qty'];
-  console.log('qty');
-  var div_id = "#plant_number" + response['user_plant_id'];
-  console.log(div_id);
-  $(div_id).html('<div>' + qty + '</div>');
-}
-
-function addNum(evt){
-  evt.preventDefault();
-  console.log($(this));
-  var formInputs = $(this).serialize();
-  console.log(formInputs);
-
-  $.post('/addqty.json', formInputs, displayQty);
-  console.log('#7');
-}
+  <script src="/static/complete_alerts.js"></script>
+  <script src="/static/add_qty.js"></script>
   
-$('.ajaxform').on('submit', addNum);
 
-console.log($('#input#5'))
-function completeTask(){
-  var checkboxid = $(this).attr('id');
-  console.log(this);
-  var id = 'divalert'+ checkboxid;
-  console.log(id);
-  if($(this).prop(":checked"));{  
-    console.log('3');
-    $('#'+ id).hide();
-    console.log('4');
-  }
-}
-
-$('.completedalert').on('click', completeTask)
-
-function hideAlert(response){
-  var completion = response['completion'];
-  console.log('5');
-  var div_id = "#alert" + response['user_plant_id'];
-  console.log('6');
-}
-
-function addAlertCompletion(evt){
-  evt.preventDefault();
-  console.log('7')
-  var formInputs = $(this).serialize();
-  console.log(formInputs);
-  console.log('8');
-  $.post('/completealert.json', formInputs, hideAlert);
-  console.log('9');
-}
-  
-$('.alertajaxform').on('click', addAlertCompletion);
-console.log('10');
-
-
-
-</script>
 {% endblock %}
 

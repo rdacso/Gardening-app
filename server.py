@@ -3,13 +3,16 @@
 from jinja2 import StrictUndefined
 
 from datetime import datetime
-from flask import Flask, jsonify,render_template, redirect, request, flash, session, json
+from flask import Flask, jsonify,render_template, redirect, request, flash, session, json 
+from flask.ext.login import login_user, logout_user, current_user, login_required
 from flask_debugtoolbar import DebugToolbarExtension
+
 
 
 from model import User, UserPlant, PlantType, AlertType, Alert, connect_to_db, db
 
 from helper import load_all_plant_types, load_all_alerts_types
+
 
 
 app = Flask(__name__)
@@ -20,6 +23,7 @@ app.secret_key = "ABC"
 # Normally, if you use an undefined variable in Jinja2, it fails
 # silently. This is horrible. Fix this so that, instead, it raises an
 # error.
+
 app.jinja_env.undefined = StrictUndefined
 app.jinja_env.auto_reload = True
 
@@ -28,13 +32,14 @@ app.jinja_env.auto_reload = True
 def index():
     """Homepage."""
     #show homepage.html template
+    users = User.query.all()
     return render_template("homepage.html")
 
 
 @app.route('/register', methods=['GET'])
 def user_signin():
     """User sign in form."""
-    
+    users = User.query.all()
     return render_template('user_form.html')
 
 @app.route('/register',methods=['POST'])
