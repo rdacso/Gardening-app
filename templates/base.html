@@ -4,9 +4,12 @@
 
 
 
-  <title>w</title>
+  <title>Green Light</title>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script>'http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js'</script>
+
+  <!-- <script src='/static/form_validation.js'></script> -->
   <link href="/static/styles.css" rel="stylesheet" >
   <nav class="navbar navbar-default">
   <div class="container-fluid">
@@ -20,7 +23,6 @@
       <ul class="nav navbar-nav navbar-right">
 
         {% if "user_id" in session %}
-        Welcome {{ session['user_id'] }}!
         <li><a href="/users/{{ session['user_id'] }}">Profile</a></li>
         <li><a href="/logout">Logout</a></li>
         {%endif %}

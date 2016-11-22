@@ -3,14 +3,21 @@
 
     <h2>Please Register to Sign In</h2>
 
-    <form action='/register' method='POST'>
-      <label> First Name </label><input type='text' name='first_name'><br>
-      <label> Last Name </label><input type='text' name='last_name'><br>
-      <label> Email </label><input type='text' name='email'><br>
-      <label> Phone Number </label><input type='text' name='phone_number'><br>
-      <label> Password </label><input type='password' name='password'><br>
+    <form action='/register' id='registrationform' method='POST'>
+      <label for='firstname'>First Name <input type='text' minlength='2' id='firstname' name='first_name'></label><br>
+      <label for='lastname'> Last Name <input type='text' minlength='2' id='lastname' name='last_name'></label><br>
+      <label for='email'> Email <input type='email' id='email' name='email'></label><br>
+      <label for='phone'> Phone Number <input type='number' minlength='10' id='phone' name='phone_number'></label><br>
+      <label for='password'> Password <input type='password' id='password' name='password'></label><br>
+      <label for='confirm_password'>Confirm Password <input type='password' id='confirm_password' name='confirm_password'></label><br>
       <input type="submit">
 </form>
     </form> 
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
+  <script src='/static/form_validation.js'></script>
+
 
 {% endblock %}

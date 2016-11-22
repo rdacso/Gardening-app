@@ -26,6 +26,7 @@ django-timezone-field==1.2
 enum34==1.1.6
 Flask==0.11.1
 Flask-Babel==0.11.1
+Flask-Bcrypt==0.7.1
 Flask-DebugToolbar==0.10.0
 Flask-Login==0.4.0
 Flask-Mail==0.9.1

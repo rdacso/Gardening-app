@@ -33,59 +33,23 @@ def allowed_file(filename):
 @app.route('/')
 def index():
     """Homepage."""
-    #show homepage.html template
-    users = User.query.all()
+    
+    #display homepage
     return render_template("homepage.html")
-
-
-@app.route('/register', methods=['GET'])
-def user_signin():
-    """User sign in form."""
-    users = User.query.all()
-    return render_template('user_form.html')
-
-@app.route('/register',methods=['POST'])
-def register_process():
-    """User sign in form."""
-
-
-    # Get form variables
-    first_name = request.form["first_name"]
-    last_name = request.form["last_name"]
-    email = request.form["email"]
-    phone_number = request.form["phone_number"]
-    city = request.form["city"]
-    state = request.form["state"]
-    zip_code = request.form["zip_code"]
-    password = request.form["password"]
-
-    #assign form variables to new_user variable
-    new_user = User(first_name=first_name, last_name=last_name, email=email, phone_number=phone_number, city=city, state=state, zip_code=zip_code, password=password)
-    #add new user to the database
-    db.session.add(new_user)
-    db.session.commit()
-
-    flash("User %s added." % email)
-    session["user_id"] = new_user.user_id
-    return redirect("/users/%s" % new_user.user_id)
-
-@app.route('/login', methods=['GET'])
-def login():
-    """Log In."""
-
-    #show the login template
-    return render_template("login.html")
 
 
 @app.route('/login', methods=['POST'])
 def confirm():
     """Log In."""
+
     #get the form variables
     email = request.form["email"]
     password = request.form["password"]
 
+    #query User table to see if new user is actually an existing user
     user = User.query.filter_by(email=email).first()
 
+    #conditional to check to see if the user exists. 
     if not user:
         flash("No such user")
         return redirect("/login")
@@ -100,43 +64,41 @@ def confirm():
     return redirect("/users/%s" % user.user_id)
 
 
-@app.route('/logout')
-def logout():
-    """Log out."""
-    #delete the session user_id
-    del session["user_id"]
-    flash("Logged Out.")
-    #return user ot the homepage
-    return redirect("/")
+@app.route('/register', methods=['GET'])
+def user_signin():
+    """User sign in form."""
 
+    #display registration form
+    return render_template('user_form.html')
 
-@app.route("/users")
-def user_list():
-    """Show list of users."""
+@app.route('/register',methods=['POST'])
+def register_process():
+    """User sign in form."""
 
-    #query and display all users in database
-    users = User.query.all()
-    return render_template("user_list.html", users=users)
+    # Get form variables from registration form
+    first_name = request.form["first_name"]
+    last_name = request.form["last_name"]
+    email = request.form["email"]
+    phone_number = request.form["phone_number"]
+    password = request.form["password"].encode('utf-8')
 
-@app.route('/plants')
-def plant_list():
-    """show list of plants """
+    #query User table to see if new user is actually an existing user
+    new_user = User.query.filter_by(email=email).first()
 
-    plants = PlantType.query.all()
+    #conditional to check if user exists in db. If user exists, redirect to login. Otherwise add to db and redirect to user's profile page.
+    if new_user:
+        flash('You already exist! Please log in.')
+        return redirect('/login')
+    else: 
+        new_user = User(first_name=first_name, last_name=last_name, email=email, phone_number=phone_number, password=password)
+        
+    #add new user to the database
+        db.session.add(new_user)
+    db.session.commit()
 
-    return render_template('plant_list.html', plants=plants)
-
-@app.route('/displayplant/<filename>')
-def upload_plant_image(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
-
-
-app.route('/plants/<int:plant_id>')
-def plant_info(plant_id):
-    """shows plant info"""
-    plant_info = PlantType.query.filter_by(plant_id).all()
-
-    return render_template('plant_info.html', plant_info=plant_info)
+    flash("User %s added." % email)
+    session["user_id"] = new_user.user_id
+    return redirect("/users/%s" % new_user.user_id)
 
 
 @app.route('/users/<int:user_id>')
@@ -164,6 +126,7 @@ def add_plants():
     #get user session id
     user_id = session.get('user_id')
 
+    #conditional to verify user is logged in before plants are added.
     if user_id:
         user_plant = UserPlant.query.filter_by(user_id=user_id, plant_id=plant_id).first()
 
@@ -188,10 +151,13 @@ def add_alerts():
 
     """Users can add alerts to the plants on their profiles. """
 
+    #get form variables
     user_plant_id = request.form.get('user_plant_id')
     alert_type_id = request.form.get('alert_type_id')
     date = request.form['date']
     user_id = session.get('user_id')
+
+    #conditional to verify user is logged in before alerts are added.
 
     if user_id:
         user_alert = Alert.query.filter_by(alert_type_id=alert_type_id, user_plant_id=user_plant_id, date=date ).all()
@@ -201,7 +167,6 @@ def add_alerts():
 
     #conditional that searches userplant table for existing plants. if it already exists, plant is left alone. if plant does not exist, it's added to the table.
     if user_alert:
-        # user_alert.date = date
         flash('Alert updated!')
     else: 
         user_alert = Alert(user_plant_id=user_plant_id, alert_type_id=alert_type_id, date=date)
@@ -215,13 +180,14 @@ def add_alerts():
 
 @app.route('/addqty.json', methods=['POST'])
 def add_qty():
+    """User can add quantity to plant in garden """
+
+    #get form variables
     qty = request.form.get('qty')
     user_plant_id = request.form.get('user_plant_id')
-
-    print "user_plant_id", user_plant_id
-
     user_id = session.get('user_id')
 
+     #conditional to verify user is logged in before alerts are added. If they are logged in, quantity is updated.
     if user_id:
         plant_number = UserPlant.query.get(user_plant_id)
         plant_number.qty = qty
@@ -231,23 +197,22 @@ def add_qty():
 
 
     flash('Quantity updated')
-    # db.session.add(plant_number)
     db.session.commit()
 
     return jsonify({'user_plant_id':user_plant_id, 'qty':qty})
 
 @app.route('/completealert.json', methods=['POST'])
 def complete_alert():
+    """Mark alert task as complete """
 
+    #get form variables
     completion = bool(request.form.get('completion'))
     user_plant_id = request.form.get('user_plant_id')
-    print user_plant_id
-    print type(completion)
     user_id = session.get('user_id')
 
+     #conditional to verify user is logged in before alerts are added. If they are logged in, task completion is updated.
     if user_id:
         alert_completion = Alert.query.get(user_plant_id)
-        print '************',alert_completion
         alert_completion.completion = completion
 
     else:
@@ -260,10 +225,14 @@ def complete_alert():
 
     return jsonify({'completion':completion, 'user_plant_id':user_plant_id})
 
-@app.route('/searchbox', methods=['GET'])
-def search_function():
-
-    search_plants(user_id, plant_id)
+@app.route('/logout')
+def logout():
+    """Log out."""
+    #delete the session user_id
+    del session["user_id"]
+    flash("Logged Out.")
+    #return user ot the homepage
+    return redirect("/")
 
 
 if __name__ == "__main__":

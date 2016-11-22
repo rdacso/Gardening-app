@@ -1,6 +1,9 @@
 from model import User, UserPlant, PlantType, AlertType, Alert, connect_to_db, db
 from flask import jsonify, request
 import math
+from flask.ext.wtf import Form
+from wtforms import TextField, PasswordField
+from wtforms.validators import Required, Email
 
 # Get all records from a table
 #######################################
@@ -87,3 +90,11 @@ def search_plants(user_id, plant_id):
 
     return item_from_db
 
+class EmailPasswordForm(Form):
+    email = TextField('Email', validators=[Required(), Email()])
+    password = PasswordField('Password', validators=[Required()])
+
+
+def check_if_user_logged_in():
+    user_id = session.get('user_id')
+    
