@@ -28,7 +28,7 @@
       {% for plant in user.userplants %}
           <li>
               <div id='plant_common_name'>
-                <b>{{ plant.plant_type.common_name }}</b> 
+                <a href='/plantinfo{{ plant.plant_id }}' <b>{{ plant.plant_type.common_name }}</b></a>
 
               <form action='/addqty.json' method='POST' class='ajaxform'>
                 <input type='hidden' value='{{ plant.up_id }}' id='qtyhidden{{ plant.up_id }}' name='user_plant_id'>
