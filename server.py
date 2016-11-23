@@ -126,6 +126,12 @@ def add_plants():
 
     return redirect("/users/" + str(user_id))
 
+app.route('/displayplantinfo')
+def display_plant_info():
+    """shows plant info"""
+    plant_info = PlantType.query.filter_by(plant_id).all()
+
+    return render_template('plant_info.html', plant_info=plant_info)
 
 @app.route('/addalerts', methods=['POST'])
 def add_alerts():

@@ -22,14 +22,12 @@
 
 <h2>These are the plants in your garden!</h2>
 
-<input type="text" name="search" placeholder="Search.."> <input type='submit'>
-
  <ul>
       {% for plant in user.userplants %}
           <li>
               <div id='plant_common_name'>
-                <a href='/plantinfo{{ plant.plant_id }}' <b>{{ plant.plant_type.common_name }}</b></a>
-
+                <a href='/plantinfo{{ plant.plant_id }}'><b>{{ plant.plant_type.common_name }}</b> </a>
+                       
               <form action='/addqty.json' method='POST' class='ajaxform'>
                 <input type='hidden' value='{{ plant.up_id }}' id='qtyhidden{{ plant.up_id }}' name='user_plant_id'>
                 <p>QTY: <input type='number' id='qty{{ plant.up_id }}' name='qty'> <input type='submit' class='qtysubmit' id='qtysubmit{{ plant.up_id }}'></p> 
