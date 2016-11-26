@@ -1,23 +1,67 @@
 {% extends 'base.html' %}
 {% block content %}
 
-    <h2>Please Register to Sign In</h2>
+    
 
-    <form action='/register' id='registrationform' method='POST'>
-      <label for='firstname'>First Name <input type='text' minlength='2' id='firstname' name='first_name'></label><br>
-      <label for='lastname'> Last Name <input type='text' minlength='2' id='lastname' name='last_name'></label><br>
-      <label for='email'> Email <input type='email' id='email' name='email'></label><br>
-      <label for='phone'> Phone Number <input type='number' minlength='10' id='phone' name='phone_number'></label><br>
-      <label for='password'> Password <input type='password' id='password' name='password'></label><br>
-      <label for='confirm_password'>Confirm Password <input type='password' id='confirm_password' name='confirm_password'></label><br>
-      <input type="submit">
-</form>
-    </form> 
+<div class="container" id='formcontainer'>
+  <form action='/register' id='registrationform' method='POST'>
 
+  <h2>Please Register to Sign In</h2>
+
+    <div class="form-group row">
+      <label for="firstname" class="col-sm-2 col-form-label">First Name</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="firstname" name='first_name' minlength='2' placeholder="First Name">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="lastname" class="col-sm-2 col-form-label">Last Name</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="lastname" name='last_name' minlength='2' placeholder="Last Name">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="email" class="col-sm-2 col-form-label">Email</label>
+      <div class="col-sm-10">
+        <input type="email" class="form-control" id="email" name='email' placeholder="Email">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="phone" class="col-sm-2 col-form-label">Phone Number</label>
+      <div class="col-sm-10">
+        <input type="number" class="form-control" minlength='10' id="phone" name='phone_number' placeholder="Phone Number">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="password" class="col-sm-2 col-form-label">Password</label>
+      <div class="col-sm-10">
+        <input type="password" class="form-control" id='password' name='password' placeholder="Password">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="confirm_password" class="col-sm-2 col-form-label">Confirm Password</label>
+      <div class="col-sm-10">
+        <input type="password" class="form-control" id='confirm_password' name='confirm_password' placeholder="Confirm Password">
+      </div>
+    </div>
+    
+    
+    <div class="form-group row">
+      <div class="offset-sm-2 col-sm-10">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </form>
+</div>
 
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
-  <script src='/static/form_validation.js'></script>
+<script src='/static/form_validation.js'></script>
 
 
 {% endblock %}

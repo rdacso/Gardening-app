@@ -25,6 +25,12 @@ def index():
     
     return render_template("homepage.html")
 
+@app.route('/login')
+def login():
+    """Display login page"""
+
+    return render_template('login.html')
+
 
 @app.route('/login', methods=['POST'])
 def confirm():
@@ -135,26 +141,32 @@ def display_plant_info():
 
 @app.route('/addalerts', methods=['POST'])
 def add_alerts():
+
     """Users can add alerts to the plants on their profiles. """
 
     #get form variables
     user_plant_id = request.form.get('user_plant_id')
     alert_type_id = request.form.get('alert_type_id')
-    date = request.form['date']
+    date = request.form.get('date')
     user_id = session.get('user_id')
 
     #conditional to verify user is logged in before alerts are added.
+
     if user_id:
-        user_alert = search_user_alerts(alert_type_id)
+        user_alert = Alert.query.filter_by(alert_type_id=alert_type_id, user_plant_id=user_plant_id, date=date ).all()
+
     else:
         raise Exception("No user logged in.")  
 
-    #If user's alert exists, do nothing. Otherwise add to db and redirect to user's profile page.
+    #conditional that searches userplant table for existing plants. if it already exists, plant is left alone. if plant does not exist, it's added to the table.
     if user_alert:
         flash('Alert updated!')
     else: 
-        add_new_alert(user_plant_id, alert_type_id, date)
+        user_alert = Alert(user_plant_id=user_plant_id, alert_type_id=alert_type_id, date=date)
         flash('New alert added')
+        db.session.add(user_alert)
+
+    db.session.commit()
     
     return redirect("/users/" + str(user_id))
 
@@ -193,6 +205,7 @@ def complete_alert():
      #conditional to verify user is logged in before alerts are added. If they are logged in, task completion is updated.
     if user_id:
         alert_completion = Alert.query.get(user_plant_id)
+        print "hi becca i love youuuu", alert_completion
         alert_completion.completion = completion
     else:
         raise Exception("No user logged in.")  

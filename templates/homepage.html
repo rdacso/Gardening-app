@@ -1,14 +1,37 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Welcome to Green Light</h1><br>
-<h3>Log In Here!</h3>
 
-<form action='/login' method='POST'>
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="container">
+
+          <div class="inner cover" id='formcontainer'>
+            <h1 class="cover-heading">Welcome to Green Light!</h1>
+            <p class="lead">Do you want to have a healthy, happy garden, but struggle with remembering to take care of your plants? Look no further! Green Light is here to help you keep track of your plants and set handy reminders for alerts. Sign in or register now and get the garden you always dreamed you'd have. </p>
+            <p class="lead">
+              <a href="/login" class="btn btn-lg btn-default">Sign In</a>
+              <a href="/register" class="btn btn-lg btn-default">Register</a>
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+<!-- <form action='/login' method='POST'>
       <label> Email </label><input type='email' name='email'><br>
       <label> Password </label><input type='password' name='password'><br>
       <input type="submit">
 </form>
 
-<a href='/register'> Create your Green Light account </a>
+<a href='/register'> Create your Green Light account </a> -->
 {% endblock %}
+
+
+
+ 

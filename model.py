@@ -36,9 +36,6 @@ class User(db.Model):
     tmz = db.Column(db.DateTime, default=datetime.datetime.utcnow())
     alerts = db.Column(db.Boolean, default=True)
 
-
-
-
     def __repr__(self):
         """Provide helpful representation when printed."""
 
