@@ -40,12 +40,15 @@ def confirm():
     email = request.form["email"]
     password = request.form["password"]
 
+
     #query User table to see if new user is actually an existing user
     user = find_existing_user(email)
+    print'*************', 'HI THERE!'
 
     #conditional to check to see if the user exists. 
     if not user:
         flash("No such user")
+
         return redirect("/login")
 
     if user.password != password:
@@ -121,7 +124,9 @@ def add_plants():
         user_plant = search_user_plants(plant_id, user_id)
 
     else:
-        raise Exception("No user logged in.")  
+        flash('Please log in before you add plants.')  
+        return redirect("/login")
+
     
     #If user's plant exists, do nothing. Otherwise add to db and redirect to user's profile page.
     if user_plant:
@@ -156,7 +161,8 @@ def add_alerts():
         user_alert = Alert.query.filter_by(alert_type_id=alert_type_id, user_plant_id=user_plant_id, date=date ).all()
 
     else:
-        raise Exception("No user logged in.")  
+        flash('Please log in before you add alerts.')  
+        return redirect("/login")
 
     #conditional that searches userplant table for existing plants. if it already exists, plant is left alone. if plant does not exist, it's added to the table.
     if user_alert:
@@ -185,7 +191,8 @@ def add_qty():
         plant_number = UserPlant.query.get(user_plant_id)
         plant_number.qty = qty
     else:
-        raise Exception("No user logged in.")  
+        flash('Please log in before you add to the quantity of your plants.')  
+        return redirect("/login") 
 
     flash('Quantity updated')
     db.session.commit()
@@ -205,10 +212,10 @@ def complete_alert():
      #conditional to verify user is logged in before alerts are added. If they are logged in, task completion is updated.
     if user_id:
         alert_completion = Alert.query.get(user_plant_id)
-        print "hi becca i love youuuu", alert_completion
         alert_completion.completion = completion
     else:
-        raise Exception("No user logged in.")  
+        flash('Please log in before you complete your alerts.')  
+        return redirect("/login") 
 
     flash('Task status updated')
     db.session.commit()
