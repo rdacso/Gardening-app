@@ -3,6 +3,8 @@ import unittest
 from model import connect_to_db, db, example_data
 from server import app
 
+#Basic unit tests that do not involve the database.
+
 class TestsForGuests(unittest.TestCase):
     """Tests that don't require the db."""
 
@@ -25,6 +27,35 @@ class TestsForGuests(unittest.TestCase):
         self.assertIn("Confirm Password", result.data)
 
 
+#Unit tests that query the database for existing data
+class FindDataInDb(unittest.TestCase):
+    """tests that query the database"""
+
+    def setUp(self):
+        app.config['TESTING'] = True
+        app.secret_key = "ABC"
+        self.client = app.test_client()
+
+        #connect to test database
+        connect_to_db(app, "postgresql:///gardening")
+
+        #create tables and add sample data
+        db.create_all()
+        example_data()
+
+    def tearDown(self):
+        """Do at end of every test."""
+
+        db.session.close()
+        db.drop_all()
+
+    def test_find_users(self):
+        """Can we find an employee in the sample data?"""
+        al = User.query.filter(User.first_name == 'Al').first()
+        self.assertEqual(al.first_name, 'Al')
+
+
+
 class UserLogin(unittest.TestCase):
     """Tests that do require db"""
     def setUp(self):
@@ -41,6 +72,7 @@ class UserLogin(unittest.TestCase):
         db.create_all()
         example_data()
 
+
     def test_register(self):
         result = self.client.post('/register',
                                     data={'first_name':'Joe', 
@@ -50,11 +82,13 @@ class UserLogin(unittest.TestCase):
                                     follow_redirects=True)
         self.assertIn('These are the plants in your garden!', result.data)
 
+
     def test_login(self):
         result = self.client.post("/login",
                               data={"email": "al@test.com", "password": "admin123"},
                               follow_redirects=True)
         self.assertIn("Welcome Al", result.data)
+        self.assertIn('rose', result.data)
 
     # def test_login_error_handling(self):
     #     """Test that user can't see important page when logged out."""
@@ -107,11 +141,7 @@ class SessTesting(unittest.TestCase):
         db.drop_all()
 
 
-login flow goes in base level
-common and variable files need to go into file 'common'
-others go into 'log in flow'
 
-when you look at login flow. robot it'll show the import. 
 
 if __name__ == "__main__":
     import unittest
