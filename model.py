@@ -138,9 +138,9 @@ class Alert(db.Model):
 def example_data():
     """Create some sample data for test database """
 
-    User.query.delete()
-    UserPlant.query.delete()
-    Alert.query.delete()
+    # User.query.delete()
+    # UserPlant.query.delete()
+    # Alert.query.delete()
 
     #Two test users with different gardens.
 

@@ -1,7 +1,8 @@
 import json
 import unittest
-from model import connect_to_db, db, example_data
+from model import User, UserPlant, PlantType, AlertType, Alert, connect_to_db, db, example_data
 from server import app
+import server
 
 #Basic unit tests that do not involve the database.
 
@@ -17,6 +18,7 @@ class TestsForGuests(unittest.TestCase):
     def test_homepage(self):
         result = self.client.get("/")
         self.assertIn("Welcome to Green Light!", result.data)
+        self.assertNotIn("Logout", result.data)
 
     def test_login_page(self):
         result = self.client.get("/login")
@@ -25,6 +27,12 @@ class TestsForGuests(unittest.TestCase):
     def test_register_page(self):
         result = self.client.get("/register")
         self.assertIn("Confirm Password", result.data)
+
+    def test_add_plants_unauthenticated(self):
+        """Try to add a plant when user isn't logged in."""
+        result = self.client.get("/addplant/1")
+
+        self.assertIn("Log In Here!", result.data)
 
 
 #Unit tests that query the database for existing data
@@ -37,24 +45,43 @@ class FindDataInDb(unittest.TestCase):
         self.client = app.test_client()
 
         #connect to test database
-        connect_to_db(app, "postgresql:///gardening")
+        connect_to_db(app, "postgresql:///testdb")
 
         #create tables and add sample data
         db.create_all()
         example_data()
+        print "done with FindDataInDb setup"
+
+    def test_find_users(self):
+        """Can we find a user in the sample data?"""
+        al = User.query.filter(User.first_name == 'Al').first()
+        self.assertEqual(al.first_name, 'Al')
+
+    def test_find_plants(self):
+        """Can we find a plant in the sample data?"""
+        rose = PlantType.query.filter(PlantType.common_name == 'rose').first()
+        self.assertEqual(rose.common_name, 'rose')
+
+    def test_find_user_plants(self):
+        """Can we find a user's plant in the sample data?"""
+        rose = UserPlant.query.filter(UserPlant.plant_id == 1).first()
+        self.assertEqual(rose.plant_id, 1)
+
+    def test_find_alert_type(self):
+        """Can we find an alert type in the sample data?"""
+        watering = AlertType.query.filter(AlertType.alert_type == 'watering').first()
+        self.assertEqual(watering.alert_type, 'watering')
+
+    def test_find_alert(self):
+        """Can we find a plant's alert in the sample data?"""
+        watering = Alert.query.filter(Alert.user_plant_id == 1).first()
+        self.assertEqual(watering.user_plant_id, 1)
 
     def tearDown(self):
         """Do at end of every test."""
 
         db.session.close()
         db.drop_all()
-
-    def test_find_users(self):
-        """Can we find an employee in the sample data?"""
-        al = User.query.filter(User.first_name == 'Al').first()
-        self.assertEqual(al.first_name, 'Al')
-
-
 
 class UserLogin(unittest.TestCase):
     """Tests that do require db"""
@@ -64,13 +91,13 @@ class UserLogin(unittest.TestCase):
         self.client = app.test_client()
 
         #connect to test database
-        connect_to_db(app, "postgresql:///gardening")
-
-
+        connect_to_db(app, "postgresql:///testdb")
 
         #create tables and add sample data
         db.create_all()
         example_data()
+
+        print "done with UserLogin setup"
 
 
     def test_register(self):
@@ -89,18 +116,7 @@ class UserLogin(unittest.TestCase):
                               follow_redirects=True)
         self.assertIn("Welcome Al", result.data)
         self.assertIn('rose', result.data)
-
-    # def test_login_error_handling(self):
-    #     """Test that user can't see important page when logged out."""
-
-    #     result = self.client.get("/users/<user_id", 
-    #                             data={'email': 'test@test.com', 'password':'fakeuser'},
-    #                             follow_redirects=True)
-    #     self.assertNotIn("Welcome Test", result.data)
-    #     self.assertIn("No such user", result.data)
-
-    # def test_existing_plants_display(self):
-    #     result = self.client.get('/users')
+        self.assertIn('watering', result.data)
 
     def tearDown(self):
         """Do at end of every test."""
@@ -109,13 +125,14 @@ class UserLogin(unittest.TestCase):
         db.drop_all()
 
 class SessTesting(unittest.TestCase):
+    """Tests that do require db"""
     def setUp(self):
         app.config['TESTING'] = True
         app.secret_key = "ABC"
         self.client = app.test_client()
 
         #connect to test database
-        connect_to_db(app, "postgresql:///gardening")
+        connect_to_db(app, "postgresql:///testdb")
 
         #create tables and add sample data
         db.create_all()
@@ -124,15 +141,12 @@ class SessTesting(unittest.TestCase):
         with self.client as c:
           with c.session_transaction() as sess:
               sess['user_id'] = 1
-  
+
 
     def test_logout(self):
 
         result = self.client.get("/logout", follow_redirects=True)
         self.assertIn("healthy, happy garden", result.data)
-
-
-
 
     def tearDown(self):
         """Do at end of every test."""
@@ -140,10 +154,7 @@ class SessTesting(unittest.TestCase):
         db.session.close()
         db.drop_all()
 
-
-
-
 if __name__ == "__main__":
-    import unittest
+    # import unittest
 
     unittest.main()
