@@ -33,17 +33,19 @@
 
 <div class="row">
   <div class="col-sm-9">
-     <div id='plant_common_name' class='text-left'>
+    <div id='plant_common_name' class='text-left'>
       <h3><b>{{ plant.plant_type.common_name }}</b></h3>
       <span class='number_of_plants' id='plant_number{{ plant.up_id }}'>You have {{plant.qty}} of these plants in your garden. </span>
     </div>
     <div class="row">
       <div class="col-xs-4 col-sm-6">
+        <span class='text-left'>
          Number of Plants
       <form action='/addqty.json' method='POST' class='ajaxform'>
         <input type='hidden' value='{{ plant.up_id }}' id='qtyhidden{{ plant.up_id }}' name='user_plant_id'>
         <input type='number' id='qty{{ plant.up_id }}' name='qty'> <input type='submit' class='qtysubmit' id='qtysubmit{{ plant.up_id }}'>
-      </form>    
+      </form>
+      </span>    
       </div>
     <div class="row">
       <div class="col-xs-4 col-sm-6">
@@ -76,7 +78,7 @@
     </div>
   </div>
 </div>
-
+</div>  
 
 
 
@@ -109,7 +111,6 @@
 {% endfor %}
 </div>
 </div>
-
 
 
 

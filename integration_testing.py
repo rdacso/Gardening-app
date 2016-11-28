@@ -28,12 +28,6 @@ class TestsForGuests(unittest.TestCase):
         result = self.client.get("/register")
         self.assertIn("Confirm Password", result.data)
 
-    def test_add_plants_unauthenticated(self):
-        """Try to add a plant when user isn't logged in."""
-        result = self.client.get("/addplant/1")
-
-        self.assertIn("Log In Here!", result.data)
-
 
 #Unit tests that query the database for existing data
 class FindDataInDb(unittest.TestCase):
@@ -147,6 +141,12 @@ class SessTesting(unittest.TestCase):
 
         result = self.client.get("/logout", follow_redirects=True)
         self.assertIn("healthy, happy garden", result.data)
+
+    def test_add_plant(self):
+        result = self.client.post('addplant', 
+                                data={'common_name': 'bluebell'},
+                                follow_redirects=True)
+        self.assertIn('bluebell', result.data)
 
     def tearDown(self):
         """Do at end of every test."""
