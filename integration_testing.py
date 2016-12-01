@@ -41,7 +41,7 @@ class FindDataInDb(unittest.TestCase):
         self.client = app.test_client()
 
         #connect to test database
-        connect_to_db(app, "postgresql:///testingdb")
+        connect_to_db(app, )
 
         #create tables and add sample data
         db.create_all()
@@ -87,6 +87,7 @@ class UserLogin(unittest.TestCase):
         app.secret_key = "ABC"
         self.client = app.test_client()
 
+
         #connect to test database
         connect_to_db(app, "postgresql:///testdb")
 
@@ -130,9 +131,6 @@ class SessTesting(unittest.TestCase):
 
         #connect to test database
         connect_to_db(app, "postgresql:///testdb")
-
-        db.drop_all()
-
 
         #create tables and add sample data
         db.create_all()
