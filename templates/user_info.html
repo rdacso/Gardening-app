@@ -76,7 +76,7 @@
     <input type='hidden' value='{{ plant.up_id }}' id='alerthidden{{ plant.up_id }}' name='user_plant_id' class='completetheform'>
       {% for alert in plant.alerts: %}
         {% if alert.completion == False %}
-          <div id='divalert{{ alert.alert_id }}' class='text-center col-md-4' style="border: 2px solid black; padding-top: 10px;">
+          <div id='divalert{{ alert.alert_id }}' class='text-center col-md-4' style="border: 2px solid black; padding: 10px;">
             <ul> Task: {{ alert.alert_type }}</ul>
             <ul> Date: {{ alert.date }} </ul>
           <form action='/completealert.json' method='POST' class='alertajaxform'>

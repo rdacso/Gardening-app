@@ -97,7 +97,7 @@ class PlantType(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Plants plant_id=%s plant_name=%s>" % (self.plant_id, self.plant_name)
+        return "<Plants plant_id=%s common_name=%s>" % (self.plant_id, self.common_name)
 
   
 class AlertType(db.Model):
@@ -144,9 +144,9 @@ def example_data():
 
     #Two test users with different gardens.
 
-    tester1 = User(first_name='Al', last_name='Beback', email='al@test.com', password='admin123')
+    tester1 = User(first_name='Ari', last_name='Verdercci', email='av@test.com', password='admin123')
 
-    tester2 = User(first_name='Freida', last_name='Beemee', email='fb@test.com', password='admin456')
+    tester2 = User(first_name='Freida', last_name='Beemee', email='fbee@test.com', password='admin456')
 
     #Three plants for the users to select from
 

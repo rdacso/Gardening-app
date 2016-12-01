@@ -4,6 +4,8 @@ from model import User, UserPlant, PlantType, AlertType, Alert, connect_to_db, d
 from server import app
 import server
 
+TEST_DATABASE_URI = "postgresql:///testingdb"
+
 #Basic unit tests that do not involve the database.
 
 class TestsForGuests(unittest.TestCase):
@@ -39,17 +41,18 @@ class FindDataInDb(unittest.TestCase):
         self.client = app.test_client()
 
         #connect to test database
-        connect_to_db(app, "postgresql:///testdb")
+        connect_to_db(app, "postgresql:///testingdb")
 
         #create tables and add sample data
         db.create_all()
         example_data()
+        # print PlantType.query.get(1)
         print "done with FindDataInDb setup"
 
     def test_find_users(self):
         """Can we find a user in the sample data?"""
-        al = User.query.filter(User.first_name == 'Al').first()
-        self.assertEqual(al.first_name, 'Al')
+        al = User.query.filter(User.first_name == 'Ari').first()
+        self.assertEqual(al.first_name, 'Ari')
 
     def test_find_plants(self):
         """Can we find a plant in the sample data?"""
@@ -106,9 +109,9 @@ class UserLogin(unittest.TestCase):
 
     def test_login(self):
         result = self.client.post("/login",
-                              data={"email": "al@test.com", "password": "admin123"},
+                              data={"email": "av@test.com", "password": "admin123"},
                               follow_redirects=True)
-        self.assertIn("Welcome Al", result.data)
+        self.assertIn("Welcome Ari", result.data)
         self.assertIn('rose', result.data)
         self.assertIn('watering', result.data)
 
@@ -128,6 +131,9 @@ class SessTesting(unittest.TestCase):
         #connect to test database
         connect_to_db(app, "postgresql:///testdb")
 
+        db.drop_all()
+
+
         #create tables and add sample data
         db.create_all()
         example_data()
@@ -136,17 +142,20 @@ class SessTesting(unittest.TestCase):
           with c.session_transaction() as sess:
               sess['user_id'] = 1
 
+    # def test_add_quantity(self):
+    #     result = self.client.get('/addqty.json', data={'qty': 33, 'user_plant_id':1})
+    #     self.assertIn("{'user_plant_id':1, 'qty':33}", result.data)
 
     def test_logout(self):
 
         result = self.client.get("/logout", follow_redirects=True)
         self.assertIn("healthy, happy garden", result.data)
 
-    def test_add_plant(self):
-        result = self.client.post('addplant', 
-                                data={'common_name': 'bluebell'},
-                                follow_redirects=True)
-        self.assertIn('bluebell', result.data)
+    # def test_add_plant(self):
+    #     result = self.client.post('addplant', 
+    #                             data={'common_name': 'bluebell'},
+    #                             follow_redirects=True)
+    #     self.assertIn('bluebell', result.data)
 
     def tearDown(self):
         """Do at end of every test."""
