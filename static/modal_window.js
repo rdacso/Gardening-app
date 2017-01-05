@@ -1,11 +1,11 @@
 
 'use strict'; 
 
-// display modal window
+// display modal window for plant tasks
 
 var span = document.getElementsByClassName("close")[0];
 
-function displayModal() {
+function displayPlantModal() {
   var id = $(this).attr('id');
   $('#modal'+ id).css('display', 'block');
   
@@ -14,16 +14,9 @@ function displayModal() {
 }}
 
 // event handler that calls the function that displays the modal window
-$('.modalbutton').on('click', displayModal);
+$('.modalbutton').on('click', displayPlantModal);
 
 
-
-// When 'submit' button is clicked, submit a form
-
-$(".userform").on("submit", function(){
-      var formInputs = $(this);
-      console.log(formInputs);
-  })
 
 
   

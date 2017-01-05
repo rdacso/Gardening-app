@@ -2,36 +2,90 @@
 {% block content %}
 
 
-    <div class="site-wrapper">
+  <div class="site-wrapper">
 
-      <div class="site-wrapper-inner">
-
-        <div class="container">
-
-          <div class="inner cover" id='formcontainer'>
+    <div class="site-wrapper-inner">
+      <div class="container">
+        <div class="inner cover" id='formcontainer'>
           <br>
             <h1 class="cover-heading">Welcome to Green Light!</h1>
             <p class="lead" style="padding: 10px">Do you want to have a healthy, happy garden, but struggle with remembering to take care of your plants? Look no further! Green Light is here to help you keep track of your plants and set handy reminders for alerts. Sign in or register now and get the garden you always dreamed you'd have. </p>
             <p class="lead" style="padding: 10px">
-              <a href="/login" class="btn btn-lg btn-default">Sign In</a>
-              <a href="/register" class="btn btn-lg btn-default">Register</a>
-            </p>
-            
-          </div>
+            <!-- Trigger the modal with a button -->
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
 
-        </div>
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
 
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
       </div>
-
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
     </div>
 
-<!-- <form action='/login' method='POST'>
-      <label> Email </label><input type='email' name='email'><br>
-      <label> Password </label><input type='password' name='password'><br>
-      <input type="submit">
-</form>
+  </div>
+</div>
+              <!-- Trigger the modal with a button -->
+              <!-- <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Sign In</button> -->
 
-<a href='/register'> Create your Green Light account </a> -->
+              <!-- Modal -->
+              <!-- <div id="myModal" class="modal fade" role="dialog">
+                <div class="modal-dialog"> -->
+                  <!-- Modal content-->
+                  <!-- <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">X</button>
+                      <h4 class="modal-title">Sign In</h4>
+                    </div>
+                    <div class="modal-body">
+                      <form action='/login' method='POST'>
+
+                      <h2>Log In Here!</h2>
+
+                        <div class="form-group row">
+                          <label for="email" class="col-sm-2 col-form-label">Email</label>
+                          <div class="col-sm-10">
+                            <input type="email" class="form-control" id="email" name='email' placeholder="Email">
+                          </div>
+                        </div>
+
+                        <div class="form-group row">
+                          <label for="password" class="col-sm-2 col-form-label">Password</label>
+                          <div class="col-sm-10">
+                            <input type="password" class="form-control" id="password" name='password' placeholder="Password">
+                          </div>
+                        </div>
+
+                        <div class="form-group row">
+                          <div class="offset-sm-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+
+                </div>
+              </div> -->
+            </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 {% endblock %}
 
 
