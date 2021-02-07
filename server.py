@@ -176,7 +176,7 @@ def add_alerts():
     
     return redirect("/users/" + str(user_id))
 
-
+# Add plant quantity route
 @app.route('/addqty.json', methods=['POST'])
 def add_qty():
     """User can add quantity to plant in garden """
@@ -199,7 +199,7 @@ def add_qty():
 
     return jsonify({'user_plant_id':user_plant_id, 'qty':qty})
 
-
+# Complete alert route
 @app.route('/completealert.json', methods=['POST'])
 def complete_alert():
     """Mark alert task as complete """
@@ -222,7 +222,7 @@ def complete_alert():
 
     return jsonify({'completion':completion, 'user_plant_id':user_plant_id})
 
-
+# Logout route
 @app.route('/logout')
 def logout():
     """Log out."""
