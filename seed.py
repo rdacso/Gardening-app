@@ -9,8 +9,6 @@ from model import connect_to_db, db
 from server import app
 from datetime import datetime
 
-
-
 def load_plants():
     """Load users from u.user into database."""
 
@@ -73,4 +71,3 @@ if __name__ == "__main__":
     # Import different types of data
     load_plants()
     load_alerts()
-
