@@ -1,103 +1,98 @@
 {% extends 'base.html' %}
 {% block content %}
 
-
-
 <div class="container-fluid">
-<div class="container" id='formcontainer'>
+  <div class="container" id='formcontainer'>
 
-  <div class='row'>
-    <h1>Welcome {{ user.first_name }} {{ user.last_name }}!</h1>
-  </div>
-
-  <div class='row'>
-    <h2>Please select your plant from the dropdown index</h2>
-    <form action='/addplants' method='POST'>
-      <select name='plant_id'>
-      {% for plant in load_plants %}
-        <option value='{{ plant.plant_id }}'>{{ plant.common_name }}</option>
-      {% endfor %}
-      </select>
-      <input type='submit'>
-    </form>
-  </div>
-
-
-<h2>These are the plants in your garden!</h2>
-
-{% for plant in user.userplants %}
-
-<div class="row">
-  <div class="col-md-6 col-md-offset-3" id='plantinfo'>
-    <div id='plant_common_name' class='text-center' style="padding-bottom: 10px;">
-      <h3><b>{{ plant.plant_type.common_name }}</b></h3>
-      <span class='number_of_plants' id='plant_number{{ plant.up_id }}'>You have {{plant.qty}} of these plants in your garden. </span>
+    <div class='row'>
+      <h1>Welcome {{ user.first_name }} {{ user.last_name }}!</h1>
     </div>
-  </div>
-</div>
-<div class="row">
-  <div id=plantquantity>
-    <span class='col-md-6 col-md-offset-3' style="padding-top: 10px;">
-      <form action='/addqty.json' method='POST' class='ajaxform'>
-        <input type='hidden' value='{{ plant.up_id }}' id='qtyhidden{{ plant.up_id }}' name='user_plant_id'>
-        <label>How many {{ plant.plant_type.common_name }}(s) do you have? <input type='number' id='qty{{ plant.up_id }}' name='qty'> <input type='submit' class='qtysubmit' id='qtysubmit{{ plant.up_id }}'></label>
+
+    <div class='row'>
+      <h2>Please select your plant from the dropdown index</h2>
+      <form action='/addplants' method='POST'>
+        <select name='plant_id'>
+        {% for plant in load_plants %}
+          <option value='{{ plant.plant_id }}'>{{ plant.common_name }}</option>
+        {% endfor %}
+        </select>
+        <input type='submit'>
       </form>
-    </span>    
-  </div>
-</div>
+    </div>
 
-<div class="form-group row">
-  <span class='col-md-6 col-md-offset-3' style="padding-top: 10px;">
-    <button id="{{ plant.up_id }}" class='modalbutton'>Task Reminder</button>
-    <!-- The Modal -->
-      <div id="modal{{ plant.up_id }}" class="modal">
-    <!-- Modal content -->
-        <div class="modal-content">
-          <span class="close">x</span>
-            <form action='/addalerts' method='POST' class='userform'>
-              <input type='hidden' value='{{ plant.up_id }}' id='modalhidden{{ plant.up_id }}' name='user_plant_id'>
-              <label>Please select the alert you wish to set.</label>
-              <select id='select{{ plant.up_id }}' name='alert_type_id'>
-              {% for alert in load_alerts %}
-                <option value='{{ alert.alert_type_id }}'>{{ alert.alert_type }}</option>
-              {% endfor %}
-              </select><br>
-              <label>Next care date: </label><input type='date' id='date{{ plant.up_id }}' name='date'>
-              <input type='submit' id='modalsubmit{{plant.up_id }}'>
-            </form>
+    <h2>These are the plants in your garden!</h2>
+
+    {% for plant in user.userplants %}
+
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3" id='plantinfo'>
+        <div id='plant_common_name' class='text-center' style="padding-bottom: 10px;">
+          <h3><b>{{ plant.plant_type.common_name }}</b></h3>
+          <span class='number_of_plants' id='plant_number{{ plant.up_id }}'>You have {{plant.qty}} of these plants in your garden. </span>
         </div>
-    <!--Display the alerts for each specific plant -->
       </div>
-  </span>
-</div>
+    </div>
 
-<div class="row">
-  <div id='alert{{ plant.up_id }}' class='alertinfo'>
-    <input type='hidden' value='{{ plant.up_id }}' id='alerthidden{{ plant.up_id }}' name='user_plant_id' class='completetheform'>
-      {% for alert in plant.alerts: %}
-        {% if alert.completion == False %}
+    <div class="row">
+      <div id=plantquantity>
+        <span class='col-md-6 col-md-offset-3' style="padding-top: 10px;">
+          <form action='/addqty.json' method='POST' class='ajaxform'>
+            <input type='hidden' value='{{ plant.up_id }}' id='qtyhidden{{ plant.up_id }}' name='user_plant_id'>
+            <label>How many {{ plant.plant_type.common_name }}(s) do you have? <input type='number' id='qty{{ plant.up_id }}' name='qty'> <input type='submit' class='qtysubmit' id='qtysubmit{{ plant.up_id }}'></label>
+          </form>
+        </span>    
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <span class='col-md-6 col-md-offset-3' style="padding-top: 10px;">
+        <button id="{{ plant.up_id }}" class='modalbutton'>Task Reminder</button>
+        <!-- The Modal -->
+          <div id="modal{{ plant.up_id }}" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+              <span class="close">x</span>
+                <form action='/addalerts' method='POST' class='userform'>
+                  <input type='hidden' value='{{ plant.up_id }}' id='modalhidden{{ plant.up_id }}' name='user_plant_id'>
+                  <label>Please select the alert you wish to set.</label>
+                  <select id='select{{ plant.up_id }}' name='alert_type_id'>
+                  {% for alert in load_alerts %}
+                    <option value='{{ alert.alert_type_id }}'>{{ alert.alert_type }}</option>
+                  {% endfor %}
+                  </select><br>
+                  <label>Next care date: </label><input type='date' id='date{{ plant.up_id }}' name='date'>
+                  <input type='submit' id='modalsubmit{{plant.up_id }}'>
+                </form>
+            </div>
+            <!--Display the alerts for each specific plant -->
+          </div>
+      </span>
+    </div>
+
+    <div class="row">
+      <div id='alert{{ plant.up_id }}' class='alertinfo'>
+        <input type='hidden' value='{{ plant.up_id }}' id='alerthidden{{ plant.up_id }}' name='user_plant_id' class='completetheform'>
+        {% for alert in plant.alerts: %}
+          {% if alert.completion == False %}
           <div id='divalert{{ alert.alert_id }}' class='text-center col-md-4' style="border: 2px solid black; padding: 10px;">
             <ul> Task: {{ alert.alert_type }}</ul>
             <ul> Date: {{ alert.date }} </ul>
-          <form action='/completealert.json' method='POST' class='alertajaxform'>
-            <input type='hidden' value='{{ plant.up_id }}' id='completionhidden{{ plant.up_id }}' name='user_plant_id'>
-            <input type='checkbox' name='completion' class='completedalert' id='{{ alert.alert_id }}' value='True'> Task Completed
-          </form>
+            <form action='/completealert.json' method='POST' class='alertajaxform'>
+              <input type='hidden' value='{{ plant.up_id }}' id='completionhidden{{ plant.up_id }}' name='user_plant_id'>
+              <input type='checkbox' name='completion' class='completedalert' id='{{ alert.alert_id }}' value='True'> Task Completed
+            </form>
           </div> 
-                        
-        {% endif %}
-      {% endfor %}
-  </div>
+                            
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+  {% endfor %}
+  </div> 
 </div>
 
-
-
-{% endfor %}
-</div> 
-</div>
-
-
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
   <script src="/static/complete_alerts.js"></script>
   <script src="/static/add_qty.js"></script>
   <script src="/static/modal_window.js"></script>
