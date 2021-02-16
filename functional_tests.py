@@ -15,10 +15,7 @@ class NewVisitorTest(unittest.TestCase):
         self.browser.get('http://localhost:5000/')
         self.assertIn('Green Light', self.browser.title)
 
-
     # def test_access_registration_page(self):
-
-
 
 if __name__ == "__main__":
     unittest.main()
