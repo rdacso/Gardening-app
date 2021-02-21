@@ -8,14 +8,13 @@ If you're authenticated, you'll have access to your profile, where you can add t
 
 Green Light uses the following technologies:
 
-* PostgreSQL
+* PostgreSQL 
 * SQLAlchemy
 * Python
 * Flask
 * Jinja
 * JavaScript
-* AJAX
-* JQuery
-* JQuery UI (Form Validation)
-* Bootstrap
-
+* AJAX -- v1.14.3
+* JQuery -- v3.5.1
+* JQuery UI (Form Validation) -- v1.19.3
+* Bootstrap -- v4.1.3

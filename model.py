@@ -7,14 +7,11 @@ from sqlalchemy_utils import PhoneNumber
 import json
 
 
-
-
 # This is the connection to the PostgreSQL database; we're getting this through
 # the Flask-SQLAlchemy helper library. On this, we can find the `session`
 # object, where we do most of our interactions (like committing, etc.)
 
 db = SQLAlchemy()
-
 
 ##############################################################################
 # Model definitions
@@ -151,30 +148,23 @@ def example_data():
     #Three plants for the users to select from
 
     plant1 = PlantType(common_name='rose', duration='Perennial', active_growth_period='Spring', flower_color='White', flower_conspicuous='yes', foliage_color='green', height=3.0, adapted_to_coarse_textured_soil='no', adapted_to_medium_textured_soil='yes', adapted_to_fine_textured_soil='no', fertility_requirement='medium', soil_ph_min=6.0, soil_ph_max=8.0, shade_tolerance='intermediate', temperature_min=-38, plant_image='www.google.com')
-
     plant2 = PlantType(common_name='tulip', duration='Perennial', active_growth_period='Fall', flower_color='Blue', flower_conspicuous='no', foliage_color='green', height=3.0, adapted_to_coarse_textured_soil='yes', adapted_to_medium_textured_soil='yes', adapted_to_fine_textured_soil='no', fertility_requirement='low', soil_ph_min=6.0, soil_ph_max=1.0, shade_tolerance='intermediate', temperature_min=-38, plant_image='www.facebook.com')
-
     plant3 = PlantType(common_name='bluebell', duration='Perennial', active_growth_period='Winter', flower_color='Purple', flower_conspicuous='yes', foliage_color='silver', height=3.0, adapted_to_coarse_textured_soil='no', adapted_to_medium_textured_soil='yes', adapted_to_fine_textured_soil='yes', fertility_requirement='high', soil_ph_min=22.0, soil_ph_max=8.0, shade_tolerance='high', temperature_min=-38, plant_image='www.youtube.com')
 
     #Plants selected for user gardens
 
     tester1plant = UserPlant(plant_id=1, user_id=1, qty=14)
-
     tester2plant = UserPlant(plant_id=2, user_id=2, qty=500)
 
     #Three alerts for users to select from
 
     alerttype1 = AlertType(alert_type='watering')
-
     alerttype2 = AlertType(alert_type='trimming')
-
     alerttype3 = AlertType(alert_type='fertilizing')
-
     
     #Alerts selected for user's gardens.
 
     tester1alert = Alert(user_plant_id=1, date='2016-12-28 00:00:00', completion=False, alert_type_id=1)
-
     tester2alert = Alert(user_plant_id=2, date='2016-12-29 00:00:00', completion=False, alert_type_id=3)
 
     db.session.add_all([tester1, tester2, plant1, plant2, plant3, tester1plant, tester2plant, alerttype1, alerttype2, alerttype3, tester1alert, tester2alert])

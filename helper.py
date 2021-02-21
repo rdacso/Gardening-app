@@ -73,9 +73,3 @@ def add_new_alert(user_plant_id, alert_type_id, date):
     db.session.commit()
 
     return user_alert
-
-
-
-
-
-

@@ -18,20 +18,20 @@ app.secret_key = "ABC"
 app.jinja_env.undefined = StrictUndefined
 app.jinja_env.auto_reload = True
 
-
+# Index route
 @app.route('/')
 def index():
     """Display homepage."""
     
     return render_template("homepage.html")
 
+# Login page route
 @app.route('/login')
 def login():
     """Display login page"""
-
     return render_template('login.html')
 
-
+# Login POST route
 @app.route('/login', methods=['POST'])
 def confirm():
     """Log In."""
@@ -39,7 +39,6 @@ def confirm():
     #get the form variables
     email = request.form["email"]
     password = request.form["password"]
-
 
     #query User table to see if new user is actually an existing user
     user = find_existing_user(email)
@@ -60,14 +59,13 @@ def confirm():
     flash("Logged in")
     return redirect("/users/%s" % user.user_id)
 
-
+# Register form route
 @app.route('/register', methods=['GET'])
 def user_signin():
     """Display registration form"""
-
     return render_template('user_form.html')
 
-
+# Register POST route
 @app.route('/register',methods=['POST'])
 def register_process():
     """User sign in form."""
@@ -93,7 +91,7 @@ def register_process():
     session["user_id"] = new_user.user_id
     return redirect("/users/%s" % new_user.user_id)
 
-
+# User Info route
 @app.route('/users/<int:user_id>')
 def user_info(user_id):
     """shows user info"""
@@ -109,7 +107,7 @@ def user_info(user_id):
 
     return render_template("user_info.html", user=user, load_plants=load_plants, load_alerts=load_alerts)
 
-
+# Add Plants route
 @app.route('/addplants', methods=['POST'])
 def add_plants():
     """User can add plants to their profiles """
@@ -137,6 +135,7 @@ def add_plants():
 
     return redirect("/users/" + str(user_id))
 
+# Plant Info route
 app.route('/displayplantinfo')
 def display_plant_info():
     """shows plant info"""
@@ -144,6 +143,7 @@ def display_plant_info():
 
     return render_template('plant_info.html', plant_info=plant_info)
 
+# Add alerts route
 @app.route('/addalerts', methods=['POST'])
 def add_alerts():
 
@@ -176,7 +176,7 @@ def add_alerts():
     
     return redirect("/users/" + str(user_id))
 
-
+# Add plant quantity route
 @app.route('/addqty.json', methods=['POST'])
 def add_qty():
     """User can add quantity to plant in garden """
@@ -199,7 +199,7 @@ def add_qty():
 
     return jsonify({'user_plant_id':user_plant_id, 'qty':qty})
 
-
+# Complete alert route
 @app.route('/completealert.json', methods=['POST'])
 def complete_alert():
     """Mark alert task as complete """
@@ -222,7 +222,7 @@ def complete_alert():
 
     return jsonify({'completion':completion, 'user_plant_id':user_plant_id})
 
-
+# Logout route
 @app.route('/logout')
 def logout():
     """Log out."""
